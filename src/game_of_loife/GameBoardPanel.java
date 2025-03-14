@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GameBoardPanel extends JPanel {
+public class GameBoardPanel extends JPanel implements Scrollable {
     private int[][] _board;
     private boolean painting;
     private int _zoomFactor;
@@ -42,26 +42,39 @@ public class GameBoardPanel extends JPanel {
             } else if (e.getWheelRotation() > 0) {
                 _zoomFactor = Math.max(1, _zoomFactor - 1);
             }
-            repaint();
+            updateSize();
         });
 
-        setPreferredSize(new Dimension(
-                _board[0].length * _zoomFactor,
-                _board.length * _zoomFactor));
+        // Initialize size with current zoom factor
+        updateSize();
     }
 
-    public void setBoard(int[][] board) {
-        this._board = board;
+    private void updateSize() {
+        Dimension newSize = new Dimension(
+                _board[0].length * _zoomFactor,
+                _board.length * _zoomFactor);
+        setPreferredSize(newSize);
+        setMinimumSize(newSize);  // Add minimum size to prevent collapse
+        revalidate();
         repaint();
+
+        Container parent = getParent();
+        if (parent instanceof JViewport) {
+            parent = parent.getParent();
+            if (parent instanceof JScrollPane) {
+                parent.revalidate();
+            }
+        }
+    }
+
+    public void setBoard(int[][] newBoard) {
+        this._board = newBoard;
+        updateSize();
     }
 
     public void setZoomFactor(int zoomFactor) {
         this._zoomFactor = Math.max(1, zoomFactor);
-        setPreferredSize(new Dimension(
-                _board[0].length * _zoomFactor,
-                _board.length * _zoomFactor));
-        revalidate();
-        repaint();
+        updateSize();
     }
 
     @Override
@@ -73,8 +86,15 @@ public class GameBoardPanel extends JPanel {
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
-        for (int i = 0; i < _board.length; i++) {
-            for (int j = 0; j < _board[0].length; j++) {
+        Rectangle clipBounds = g.getClipBounds();
+
+        int startRow = Math.max(0, clipBounds.y / _zoomFactor);
+        int endRow = Math.min(_board.length, (clipBounds.y + clipBounds.height) / _zoomFactor + 1);
+        int startCol = Math.max(0, clipBounds.x / _zoomFactor);
+        int endCol = Math.min(_board[0].length, (clipBounds.x + clipBounds.width) / _zoomFactor + 1);
+
+        for (int i = startRow; i < endRow; i++) {
+            for (int j = startCol; j < endCol; j++) {
                 int x = j * _zoomFactor;
                 int y = i * _zoomFactor;
 
@@ -95,5 +115,34 @@ public class GameBoardPanel extends JPanel {
             _board[row][col] = 1;
             repaint();
         }
+    }
+
+    @Override
+    public Dimension getPreferredScrollableViewportSize() {
+        return getPreferredSize();
+    }
+
+    @Override
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+        return _zoomFactor;
+    }
+
+    @Override
+    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+        if (orientation == SwingConstants.HORIZONTAL) {
+            return visibleRect.width - _zoomFactor;
+        } else {
+            return visibleRect.height - _zoomFactor;
+        }
+    }
+
+    @Override
+    public boolean getScrollableTracksViewportWidth() {
+        return false;
+    }
+
+    @Override
+    public boolean getScrollableTracksViewportHeight() {
+        return false;
     }
 }

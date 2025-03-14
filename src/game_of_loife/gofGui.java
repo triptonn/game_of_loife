@@ -1,6 +1,8 @@
 package game_of_loife;
 
 import javax.swing.SpringLayout;
+import javax.swing.JViewport;
+import java.awt.Point;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.SystemColor;
@@ -12,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GofGui extends javax.swing.JFrame {
-    int zoomFactor = 1;
+    int zoomFactor = 10;
     private JTextField tfHeight;
     private JTextField tfWidth;
     private GameBoardPanel pnlGame;
@@ -73,25 +75,7 @@ public class GofGui extends javax.swing.JFrame {
         pnlMenu.add(tfWidth);
 
         JButton btnReset = new JButton("Reset");
-        btnReset.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                GameOfLife.stopGameLoop();
-                isRunning = false;
-                btnPlay.setText("Play");
-
-                tfHeight.setText(String.valueOf(board.length));
-                tfWidth.setText(String.valueOf(board[0].length));
-                pnlGame.height = board.length;
-                pnlGame.width = board[0].length;
-
-                for (int i = 0; i < board.length; i++) {
-                    for (int j = 0; j < board[0].length; j++) {
-                        board[i][j] = 0;
-                    }
-                }
-                pnlGame.repaint();
-            }
-        });
+        btnReset.addActionListener(e -> resetBoard(scrollPane));
         pnlMenu.add(btnReset);
 
         Component strut_dim_save = Box.createHorizontalStrut(80);
@@ -120,6 +104,30 @@ public class GofGui extends javax.swing.JFrame {
 
         pnlGame.setBackground(SystemColor.controlDkShadow);
         scrollPane.setViewportView(pnlGame);
+    }
+
+    private void resetBoard(JScrollPane sp) {
+        GameOfLife.stopGameLoop();
+        isRunning = false;
+
+        try {
+            int newHeight = Integer.parseInt(tfHeight.getText());
+            int newWidth = Integer.parseInt(tfWidth.getText());
+
+            if (newHeight <= 0 || newWidth <= 0) {
+                throw new NumberFormatException("Dimensions must be positive");
+            }
+
+            board = new int[newHeight][newWidth];
+            pnlGame.setBoard(board);
+
+            JViewport viewport = sp.getViewport();
+            viewport.setViewPosition(new Point(0, 0));
+
+        } catch (NumberFormatException ex) {
+            tfHeight.setText(String.valueOf(board.length));
+            tfWidth.setText(String.valueOf(board[0].length));
+        }
     }
 
     public int[][] getBoard() {

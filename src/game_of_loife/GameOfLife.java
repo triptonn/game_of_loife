@@ -7,6 +7,7 @@ public class GameOfLife {
     private static Timer gameTimer;
     private static GameLogic gameLogic = new GameLogic();
     private static final int DEFAULT_DELAY = 500;
+    private static int[][] board;
 
     public static void startGameLoop(GofGui frame) {
         if (gameTimer != null && gameTimer.isRunning()) {
@@ -33,14 +34,18 @@ public class GameOfLife {
         }
     }
 
+    public static void setBoard(int[][] newBoard) {
+        board = newBoard;
+    }
+
     public static void main(String[] args) {
         int min_window_height = 800;
         int min_window_width = 800;
 
-        int default_game_height = min_window_height / 2;
-        int default_game_width = min_window_width / 2;
+        int default_game_height = 100;
+        int default_game_width = 100;
 
-        int[][] board = new int[default_game_width][default_game_height];
+        board = new int[default_game_width][default_game_height];
 
         GofGui frame = new GofGui(board);
 
