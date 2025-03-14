@@ -8,9 +8,6 @@ public class GameBoardPanel extends JPanel implements Scrollable {
     private int[][] _board;
     private boolean painting;
     private int _zoomFactor;
-    private static final Color GRID_COLOR = Color.DARK_GRAY;
-    private static final Color ALIVE_COLOR = Color.LIGHT_GRAY;
-    private static final Color DEAD_COLOR = Color.BLACK;
 
     public GameBoardPanel(int[][] board, int zoomFactor) {
         _board = board;
@@ -54,7 +51,7 @@ public class GameBoardPanel extends JPanel implements Scrollable {
                 _board[0].length * _zoomFactor,
                 _board.length * _zoomFactor);
         setPreferredSize(newSize);
-        setMinimumSize(newSize);  // Add minimum size to prevent collapse
+        setMinimumSize(newSize); // Add minimum size to prevent collapse
         revalidate();
         repaint();
 
@@ -98,10 +95,10 @@ public class GameBoardPanel extends JPanel implements Scrollable {
                 int x = j * _zoomFactor;
                 int y = i * _zoomFactor;
 
-                g.setColor(_board[i][j] == 1 ? ALIVE_COLOR : DEAD_COLOR);
+                g.setColor(_board[i][j] == 1 ? ColorScheme.MORE_ALIVE_COLOR : ColorScheme.DEAD_COLOR);
                 g.fillRect(x, y, _zoomFactor, _zoomFactor);
 
-                g.setColor(GRID_COLOR);
+                g.setColor(ColorScheme.GRID_COLOR);
                 g.drawRect(x, y, _zoomFactor, _zoomFactor);
             }
         }
