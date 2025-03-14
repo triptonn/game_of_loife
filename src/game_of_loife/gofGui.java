@@ -11,14 +11,16 @@ import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class gofGui extends javax.swing.JFrame {
-    int window_height = 800;
-    int window_width = 600;
-
+public class GofGui extends javax.swing.JFrame {
+    int zoomFactor = 1;
     private JTextField tfHeight;
     private JTextField tfWidth;
+    private GameBoardPanel pnlGame;
+    private int[][] board;
+    private boolean isRunning = false;
 
-    public gofGui() {
+    public GofGui(int[][] board) {
+        this.board = board;
         SpringLayout springLayout = new SpringLayout();
         getContentPane().setLayout(springLayout);
 
@@ -29,40 +31,68 @@ public class gofGui extends javax.swing.JFrame {
         springLayout.putConstraint(SpringLayout.EAST, scrollPane, -10, SpringLayout.EAST, getContentPane());
         getContentPane().add(scrollPane);
 
-        JPanel pnlGame = new JPanel();
-        pnlGame.setBackground(SystemColor.controlDkShadow);
-        scrollPane.setViewportView(pnlGame);
-
         JPanel pnlMenu = new JPanel();
         springLayout.putConstraint(SpringLayout.NORTH, pnlMenu, 10, SpringLayout.SOUTH, scrollPane);
         springLayout.putConstraint(SpringLayout.WEST, pnlMenu, 10, SpringLayout.WEST, getContentPane());
         springLayout.putConstraint(SpringLayout.SOUTH, pnlMenu, -10, SpringLayout.SOUTH, getContentPane());
         springLayout.putConstraint(SpringLayout.EAST, pnlMenu, -10, SpringLayout.EAST, getContentPane());
+
         pnlMenu.setBackground(SystemColor.controlDkShadow);
         getContentPane().add(pnlMenu);
 
+        pnlGame = new GameBoardPanel(board, zoomFactor);
+        tfHeight = new JTextField();
+        tfHeight.setText(String.valueOf(board.length));
+        tfHeight.setToolTipText("Height");
+        tfHeight.setColumns(10);
+
+        tfWidth = new JTextField();
+        tfWidth.setText(String.valueOf(board[0].length));
+        tfWidth.setToolTipText("Width");
+        tfWidth.setColumns(10);
+
         JButton btnPlay = new JButton("Play");
+        btnPlay.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!isRunning) {
+                    GameOfLife.startGameLoop(GofGui.this);
+                    btnPlay.setText("Pause");
+                } else {
+                    GameOfLife.stopGameLoop();
+                    btnPlay.setText("Play");
+                }
+                isRunning = !isRunning;
+            }
+        });
         pnlMenu.add(btnPlay);
 
         Component strut_play_dim = Box.createHorizontalStrut(40);
         pnlMenu.add(strut_play_dim);
 
+        pnlMenu.add(tfHeight);
+        pnlMenu.add(tfWidth);
+
         JButton btnReset = new JButton("Reset");
         btnReset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                GameOfLife.stopGameLoop();
+                isRunning = false;
+                btnPlay.setText("Play");
+
+                tfHeight.setText(String.valueOf(board.length));
+                tfWidth.setText(String.valueOf(board[0].length));
+                pnlGame.height = board.length;
+                pnlGame.width = board[0].length;
+
+                for (int i = 0; i < board.length; i++) {
+                    for (int j = 0; j < board[0].length; j++) {
+                        board[i][j] = 0;
+                    }
+                }
+                pnlGame.repaint();
             }
         });
         pnlMenu.add(btnReset);
-
-        tfHeight = new JTextField();
-        tfHeight.setToolTipText("Height");
-        pnlMenu.add(tfHeight);
-        tfHeight.setColumns(10);
-
-        tfWidth = new JTextField();
-        tfWidth.setToolTipText("Width");
-        pnlMenu.add(tfWidth);
-        tfWidth.setColumns(10);
 
         Component strut_dim_save = Box.createHorizontalStrut(80);
         pnlMenu.add(strut_dim_save);
@@ -87,5 +117,16 @@ public class gofGui extends javax.swing.JFrame {
             }
         });
         pnlMenu.add(btnClose);
+
+        pnlGame.setBackground(SystemColor.controlDkShadow);
+        scrollPane.setViewportView(pnlGame);
+    }
+
+    public int[][] getBoard() {
+        return board;
+    }
+
+    public GameBoardPanel getPnlGame() {
+        return pnlGame;
     }
 }
