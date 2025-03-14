@@ -9,6 +9,7 @@ import java.awt.SystemColor;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Component;
+
 import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,7 @@ public class GofGui extends javax.swing.JFrame {
 
         JScrollPane scrollPane = new JScrollPane();
         springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 10, SpringLayout.NORTH, getContentPane());
-        springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -50, SpringLayout.SOUTH, getContentPane());
+        springLayout.putConstraint(SpringLayout.SOUTH, scrollPane, -60, SpringLayout.SOUTH, getContentPane());
         springLayout.putConstraint(SpringLayout.WEST, scrollPane, 10, SpringLayout.WEST, getContentPane());
         springLayout.putConstraint(SpringLayout.EAST, scrollPane, -10, SpringLayout.EAST, getContentPane());
         getContentPane().add(scrollPane);
