@@ -7,11 +7,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.SystemColor;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Component;
 
 import javax.swing.Box;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class GofGui extends javax.swing.JFrame {
@@ -69,7 +71,7 @@ public class GofGui extends javax.swing.JFrame {
         });
         pnlMenu.add(btnPlay);
 
-        Component strut_play_dim = Box.createHorizontalStrut(40);
+        Component strut_play_dim = Box.createHorizontalStrut(30);
         pnlMenu.add(strut_play_dim);
 
         pnlMenu.add(tfHeight);
@@ -79,12 +81,39 @@ public class GofGui extends javax.swing.JFrame {
         btnReset.addActionListener(e -> resetBoard(scrollPane));
         pnlMenu.add(btnReset);
 
-        Component strut_dim_save = Box.createHorizontalStrut(80);
+        Component strut_dim_save = Box.createHorizontalStrut(60);
         pnlMenu.add(strut_dim_save);
 
         JButton btnSave = new JButton("Save");
         btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                boolean wasRunning = isRunning;
+                if (isRunning) {
+                    GameOfLife.stopGameLoop();
+                    isRunning = false;
+                    btnPlay.setText("Play");
+                }
+
+                SaveMenu saveMenu = new SaveMenu(GofGui.this);
+                saveMenu.setVisible(true);
+
+                if (saveMenu.isConfirmed()) {
+                    String filename = saveMenu.getFileName();
+                    try {
+                        BoardIO.saveBoard(board, filename);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(GofGui.this,
+                                "Error saving board: " + ex.getMessage(),
+                                "Save Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+                if (wasRunning) {
+                    GameOfLife.startGameLoop(GofGui.this);
+                    isRunning = true;
+                    btnPlay.setText("Pause");
+                }
             }
         });
         pnlMenu.add(btnSave);
@@ -92,7 +121,7 @@ public class GofGui extends javax.swing.JFrame {
         JButton btnLoad = new JButton("Load");
         pnlMenu.add(btnLoad);
 
-        Component strut_load_close = Box.createHorizontalStrut(40);
+        Component strut_load_close = Box.createHorizontalStrut(30);
         pnlMenu.add(strut_load_close);
 
         JButton btnClose = new JButton("Close");
