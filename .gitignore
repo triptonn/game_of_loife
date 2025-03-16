@@ -1,5 +1,5 @@
 .settings
-.saves
+saves
 bin
 *.jar
 .intro_prompt

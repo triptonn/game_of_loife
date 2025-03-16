@@ -25,9 +25,6 @@ public class GameBoardPanel extends JPanel implements Scrollable {
                     painting = true;
                     isPlayerOne = false;
                     updateBoard(e, 2);
-                } else {
-                    painting = true;
-                    updateBoard(e, 0);
                 }
             }
 
@@ -38,8 +35,6 @@ public class GameBoardPanel extends JPanel implements Scrollable {
             public void mouseDragged(MouseEvent e) {
                 if (painting && (e.getButton() == MouseEvent.NOBUTTON)) {
                     updateBoard(e, isPlayerOne ? 1 : 2, true);
-                } else if (painting) {
-                    updateBoard(e, 0, true);
                 }
             }
         };
@@ -109,8 +104,11 @@ public class GameBoardPanel extends JPanel implements Scrollable {
                 int y = i * _zoomFactor;
                 if (_board[i][j] > 0) {
                     g.setColor(_board[i][j] == 1 ? ColorScheme.GIRLY_MORE_ALIVE_COLOR : ColorScheme.MORE_ALIVE_COLOR);
+                } else {
+                    g.setColor(ColorScheme.DEAD_COLOR);
                 }
                 g.fillRect(x, y, _zoomFactor, _zoomFactor);
+
                 g.setColor(ColorScheme.GRID_COLOR);
                 g.drawRect(x, y, _zoomFactor, _zoomFactor);
             }

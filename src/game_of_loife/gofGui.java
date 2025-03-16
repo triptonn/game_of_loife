@@ -23,6 +23,7 @@ public class GofGui extends javax.swing.JFrame {
     private GameBoardPanel pnlGame;
     private int[][] board;
     private boolean isRunning = false;
+    private boolean wasRunning = false;
 
     public GofGui(int[][] board) {
         this.board = board;
@@ -87,7 +88,7 @@ public class GofGui extends javax.swing.JFrame {
         JButton btnSave = new JButton("Save");
         btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean wasRunning = isRunning;
+                wasRunning = isRunning;
                 if (isRunning) {
                     GameOfLife.stopGameLoop();
                     isRunning = false;
@@ -113,12 +114,39 @@ public class GofGui extends javax.swing.JFrame {
                     GameOfLife.startGameLoop(GofGui.this);
                     isRunning = true;
                     btnPlay.setText("Pause");
+                    wasRunning = false;
                 }
             }
         });
         pnlMenu.add(btnSave);
 
         JButton btnLoad = new JButton("Load");
+        btnLoad.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                wasRunning = isRunning;
+                if (isRunning) {
+                    GameOfLife.stopGameLoop();
+                    isRunning = false;
+                    btnPlay.setText("Play");
+                }
+
+                LoadMenu loadMenu = new LoadMenu(GofGui.this);
+                loadMenu.setVisible(true);
+
+                if (loadMenu.isSelected()) {
+                    String filename = loadMenu.getSelected();
+                    try {
+                        int[][] loadedBoard = BoardIO.loadBoard(filename);
+                        GameOfLife.setBoard(loadedBoard);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(GofGui.this,
+                                "Error loading board: " + ex.getMessage(),
+                                "Load Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
         pnlMenu.add(btnLoad);
 
         Component strut_load_close = Box.createHorizontalStrut(30);
@@ -158,6 +186,18 @@ public class GofGui extends javax.swing.JFrame {
             tfHeight.setText(String.valueOf(board.length));
             tfWidth.setText(String.valueOf(board[0].length));
         }
+    }
+
+    public void setRunning(boolean runningState) {
+        this.isRunning = runningState;
+    }
+
+    public boolean wasRunning() {
+        return wasRunning;
+    }
+
+    public void setBoard(int[][] board) {
+        this.board = board;
     }
 
     public int[][] getBoard() {

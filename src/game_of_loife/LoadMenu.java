@@ -5,71 +5,75 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import java.awt.List;
 import java.io.File;
+import java.io.IOException;
 
-public class SaveMenu extends JDialog {
+public class LoadMenu extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
-    private JTextField textField;
 
-    private boolean confirmed = false;
-    private List savesList;
+    private boolean isSelected = false;
+    private List savesList = new List();
+    private String selected;
 
-    public SaveMenu(GofGui parent) {
+    public LoadMenu(GofGui parent) {
         super(parent, true);
-        setTitle("Save Board");
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         SpringLayout sl_contentPanel = new SpringLayout();
         contentPanel.setLayout(sl_contentPanel);
-        textField = new JTextField();
-
-        sl_contentPanel.putConstraint(SpringLayout.NORTH, textField, 10, SpringLayout.NORTH, contentPanel);
-        sl_contentPanel.putConstraint(SpringLayout.WEST, textField, 10, SpringLayout.WEST, contentPanel);
-        sl_contentPanel.putConstraint(SpringLayout.EAST, textField, -10, SpringLayout.EAST, contentPanel);
-        textField.setToolTipText("Enter the name of your board...");
-        contentPanel.add(textField);
-        textField.setColumns(10);
 
         savesList = new List();
-        sl_contentPanel.putConstraint(SpringLayout.NORTH, savesList, 10, SpringLayout.SOUTH, textField);
+        sl_contentPanel.putConstraint(SpringLayout.NORTH, savesList, 10, SpringLayout.NORTH, contentPanel);
         sl_contentPanel.putConstraint(SpringLayout.WEST, savesList, 10, SpringLayout.WEST, contentPanel);
         sl_contentPanel.putConstraint(SpringLayout.SOUTH, savesList, -10, SpringLayout.SOUTH, contentPanel);
         sl_contentPanel.putConstraint(SpringLayout.EAST, savesList, -10, SpringLayout.EAST, contentPanel);
         contentPanel.add(savesList);
 
         updateSavesList();
-        savesList.addItemListener(e -> textField.setText(savesList.getSelectedItem()));
-
-        JPanel pnlButtons = new JPanel();
-        pnlButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        getContentPane().add(pnlButtons, BorderLayout.SOUTH);
-
-        JButton btnSave = new JButton("Save");
-        btnSave.addActionListener(e -> {
-            if (!textField.getText().trim().isEmpty()) {
-                confirmed = true;
-                setVisible(false);
+        savesList.addItemListener(e -> {
+            selected = savesList.getSelectedItem();
+            if (selected != null) {
+                isSelected = true;
             }
         });
-        pnlButtons.add(btnSave);
-        getRootPane().setDefaultButton(btnSave);
+
+        JPanel buttonPane = new JPanel();
+        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        getContentPane().add(buttonPane, BorderLayout.SOUTH);
+
+        JButton btnLoad = new JButton("Load");
+        btnLoad.addActionListener(e -> {
+            if (isSelected) {
+                try {
+                    int[][] loadedBoard = BoardIO.loadBoard(selected);
+                    parent.setBoard(loadedBoard);
+                    parent.getPnlGame().setBoard(loadedBoard);
+                    setVisible(false);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(LoadMenu.this,
+                            "Error loading board: " + ex.getMessage(),
+                            "Load Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        buttonPane.add(btnLoad);
+        getRootPane().setDefaultButton(btnLoad);
 
         JButton btnCancel = new JButton("Cancel");
         btnCancel.addActionListener(e -> {
-            confirmed = false;
+            parent.setRunning(parent.wasRunning());
             setVisible(false);
         });
-        pnlButtons.add(btnCancel);
-
-        setLocationRelativeTo(parent);
+        buttonPane.add(btnCancel);
     }
 
     private void updateSavesList() {
@@ -79,17 +83,20 @@ public class SaveMenu extends JDialog {
             File[] files = savesDir.listFiles((dir, name) -> name.endsWith(".gol"));
             if (files != null) {
                 for (File file : files) {
+                    System.out.println("File");
+                    String f = file.getName();
+                    System.out.println(f);
                     savesList.add(file.getName().replace(".gol", ""));
                 }
             }
         }
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public String getFileName() {
-        return textField.getText().trim();
+    public String getSelected() {
+        return selected;
     }
 }

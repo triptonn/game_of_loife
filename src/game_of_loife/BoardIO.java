@@ -6,7 +6,6 @@ public class BoardIO {
     private static final String SAVE_DIRECTORY = "saves";
 
     static {
-
         new File(SAVE_DIRECTORY).mkdirs();
     }
 
@@ -17,6 +16,9 @@ public class BoardIO {
         String fullPath = SAVE_DIRECTORY + File.separator + filename;
 
         try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fullPath))) {
+            System.out.println("Saving board dimensions: " + board.length + "x" + board[0].length);
+            System.out
+                    .println("Sample values from first row: " + board[0][0] + ", " + board[0][1] + ", " + board[0][2]);
 
             dos.writeInt(board.length);
             dos.writeInt(board[0].length);
@@ -32,11 +34,14 @@ public class BoardIO {
         if (!filename.endsWith(".gol")) {
             filename += ".gol";
         }
+
         String fullPath = SAVE_DIRECTORY + File.separator + filename;
 
         try (DataInputStream dis = new DataInputStream(new FileInputStream(fullPath))) {
             int rows = dis.readInt();
             int cols = dis.readInt();
+
+            System.out.println("Loading board dimensions: " + rows + "x" + cols);
 
             int[][] board = new int[rows][cols];
             for (int i = 0; i < rows; i++) {
@@ -44,6 +49,8 @@ public class BoardIO {
                     board[i][j] = dis.readInt();
                 }
             }
+            System.out.println(
+                    "Sample value from first row: " + board[0][0] + ", " + board[0][1] + ", " + board[0][2]);
             return board;
         }
     }

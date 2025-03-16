@@ -6,7 +6,7 @@ import javax.swing.Timer;
 public class GameOfLife {
     private static Timer gameTimer;
     private static GameLogic gameLogic = new GameLogic();
-    private static final int DEFAULT_DELAY = 1000;
+    private static final int DEFAULT_DELAY = 100;
     private static int[][] board;
 
     public static void startGameLoop(GofGui frame) {
