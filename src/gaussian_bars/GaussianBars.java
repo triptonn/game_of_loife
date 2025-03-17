@@ -1,7 +1,6 @@
 package gaussian_bars;
 
 import java.awt.Color;
-
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
