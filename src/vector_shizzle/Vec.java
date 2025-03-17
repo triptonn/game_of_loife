@@ -30,6 +30,14 @@ public class Vec {
         }
     }
 
+    public double x() {
+        return this.data[0];
+    }
+
+    public double y() {
+        return this.data[1];
+    }
+
     public int length() {
         return n;
     }
@@ -99,7 +107,7 @@ public class Vec {
         return c;
     }
 
-    public Vec direction() {
+    public Vec norm() {
         if (this.mag() == 0.0) {
             throw new ArithmeticException("zero-vector has no direction");
         }

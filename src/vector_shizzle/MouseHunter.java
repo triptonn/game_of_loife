@@ -14,12 +14,13 @@ public class MouseHunter {
     static int WINDOW_HEIGHT = 720;
 
     private static JFrame frame;
-    private static DrawingPanel panel;
+    private static ScenePanel panel;
 
     private static double[] draggedPos = new double[2];
     private static double[] movedPos = new double[2];
 
     private static Vec ballPos;
+    private static Vec mousePos;
 
     public static void startGameLoop() {
         if (gameTimer != null && gameTimer.isRunning()) {
@@ -27,15 +28,16 @@ public class MouseHunter {
         }
 
         gameTimer = new Timer(DEFAULT_TIME_STEP, e -> {
-            Vec mousePos = new Vec(movedPos[0], movedPos[1]);
+            mousePos = new Vec(movedPos[0], movedPos[1]);
             Vec direction = mousePos.minus(ballPos);
 
             if (direction.mag() > 0) {
-                Vec movement = direction.direction().scale(5);
+                Vec movement = direction.norm().scale(5);
                 ballPos = ballPos.plus(movement);
+                panel.drawVec(ballPos, movement.scale(20));
             }
 
-            panel.updateLoc(ballPos);
+            panel.updateBall(ballPos);
             panel.repaint();
         });
 
@@ -53,9 +55,10 @@ public class MouseHunter {
     public static void main(String[] args) {
         frame = new JFrame();
 
-        panel = new DrawingPanel();
+        panel = new ScenePanel();
         ballPos = new Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-        panel.updateLoc(ballPos);
+        mousePos = new Vec(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+        panel.updateBall(ballPos);
 
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
