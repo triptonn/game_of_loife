@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class DrawingPanel extends JPanel {
     private Point pos;
-    private static ArrayList<Point> history = new ArrayList<Point>();
+    private ArrayList<Point> drawing_history = new ArrayList<Point>();
 
     public DrawingPanel(Point pos) {
         setBackground(Color.black);
@@ -19,9 +19,8 @@ public class DrawingPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.blue);
-        for (Point p : history) {
-            System.out.println(p.x + ", " + p.y);
+        g.setColor(Color.white);
+        for (Point p : drawing_history) {
             g.fillOval(p.x, p.y, 10, 10);
         }
 
@@ -33,7 +32,7 @@ public class DrawingPanel extends JPanel {
         this.pos = pos;
     }
 
-    public static void setHistory(ArrayList<Point> list) {
-        history = list;
+    public void setDrawing_history(ArrayList<Point> list) {
+        drawing_history = new ArrayList<>(list);
     }
 }

@@ -1,6 +1,7 @@
 package random_walker;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -8,6 +9,7 @@ import javax.swing.Timer;
 public class RandomWalker {
     private static Timer gameTimer;
     private static int DEFAULT_TIME_STEP = 200;
+    private static ArrayList<Point> pointHistory = new ArrayList<Point>();
 
     static int WINDOW_WIDTH = 1280;
     static int WINDOW_HEIGHT = 720;
@@ -17,15 +19,17 @@ public class RandomWalker {
     private static Walker w;
 
     public static void startGameLoop() {
-        System.out.println("Game loop started");
         if (gameTimer != null && gameTimer.isRunning()) {
             return;
         }
 
+        addToHistory(w.getPos());
+
         gameTimer = new Timer(DEFAULT_TIME_STEP, e -> {
             w.move();
             Point newPos = w.getPos();
-            System.out.println("newPos: " + newPos);
+            addToHistory(newPos);
+            dP.setDrawing_history(pointHistory);
             dP.setPos(newPos);
             dP.repaint();
         });
@@ -48,5 +52,18 @@ public class RandomWalker {
         frame.add(dP);
         frame.setVisible(true);
         startGameLoop();
+    }
+
+    public static void addToHistory(Point p) {
+        Point pointCopy = new Point(p.x, p.y);
+        boolean isNew = true;
+        for (Point pt : pointHistory) {
+            if (pointCopy.x == pt.x && pointCopy.y == pt.y) {
+                isNew = false;
+            }
+        }
+        if (isNew) {
+            pointHistory.add(pointCopy);
+        }
     }
 }
