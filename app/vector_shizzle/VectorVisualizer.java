@@ -1,8 +1,13 @@
 package vector_shizzle;
 
-import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.JFrame;
+import javax.swing.Timer;
+
+import data.Vec;
+import objects.VectorArrow;
 
 public class VectorVisualizer {
     private static Timer sceneTimer;
@@ -10,13 +15,44 @@ public class VectorVisualizer {
     private final ScenePanel panel;
     private static JFrame frame;
 
-    static final int WINDOW_WIDTH = 1320;
-    static final int WINDOW_HEIGHT = 760;
+    private static int DEFAULT_TIME_STEP = 16;
+    static final int WINDOW_WIDTH = 1280;
+    static final int WINDOW_HEIGHT = 720;
+
+    private static double[] draggedPos = new double[2];
 
     public VectorVisualizer() {
         model = new SceneModel();
         panel = new ScenePanel(model);
         frame = new JFrame("VectorVisualizer");
+
+        panel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        panel.setBackground(Color.black);
+
+        panel.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                draggedPos[0] = e.getX();
+                draggedPos[1] = e.getY();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                model.setMousePos(new Vec(e.getX(), e.getY()));
+                panel.repaint();
+            }
+        });
+
+        panel.setFocusable(true);
+        panel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    model.toggleShowComponents();
+                    panel.repaint();
+                }
+            }
+        });
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
@@ -26,13 +62,12 @@ public class VectorVisualizer {
     }
 
     public void startLoop() {
-
         if (sceneTimer != null && sceneTimer.isRunning()) {
             return;
         }
 
-        sceneTimer = new Timer(16, e -> {
-            updateSceneState();
+        sceneTimer = new Timer(DEFAULT_TIME_STEP, e -> {
+            updateScene();
             panel.repaint();
         });
 
@@ -43,16 +78,19 @@ public class VectorVisualizer {
         if (sceneTimer != null) {
             sceneTimer.stop();
         }
-
-        System.out.println("Run finished!");
     };
 
-    private void updateSceneState() {
-        // Game logic
+    private void updateScene() {
+        model.update();
     };
 
     private void setupScene() {
-
+        Vec funVec = new Vec(-200, 300);
+        Vec funVecOrigin = new Vec(300, 200);
+        VectorArrow vecti = new VectorArrow("funVec", funVec, funVecOrigin, 20, Color.red);
+        vecti.setVisible(true);
+        model.addObject(vecti);
+        model.setShowComponents(true);
     }
 
     public static void main(String[] args) {

@@ -14,7 +14,9 @@ public class SceneModel {
     private ArrayList<SceneObject> objects;
     private ArrayList<Mover> movers;
 
-    private Vec origin = new Vec(400.0, 300.0);
+    private Vec origin = new Vec(
+            (VectorVisualizer.WINDOW_WIDTH - 40) / 2,
+            (VectorVisualizer.WINDOW_HEIGHT - 40) / 2);
 
     private Vec mousePos = origin;
 

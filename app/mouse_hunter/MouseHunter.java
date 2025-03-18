@@ -8,6 +8,7 @@ import javax.swing.Timer;
 
 import data.Vec;
 import objects.Ball;
+import objects.VectorArrow;
 
 public class MouseHunter {
     private static Timer sceneTimer;
@@ -16,8 +17,8 @@ public class MouseHunter {
     private static JFrame frame;
 
     private static int DEFAULT_TIME_STEP = 20;
-    static int WINDOW_WIDTH = 1320;
-    static int WINDOW_HEIGHT = 760;
+    static int WINDOW_WIDTH = 1280;
+    static int WINDOW_HEIGHT = 720;
 
     private static double[] draggedPos = new double[2];
 
@@ -50,6 +51,11 @@ public class MouseHunter {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     model.toggleShowComponents();
                     panel.repaint();
+                }
+
+                if (e.getKeyCode() == KeyEvent.VK_A) {
+                    Ball ball = (Ball) model.getObjects().get(0);
+                    ball.applyForce(new Vec(-0.2, 0.0));
                 }
             }
         });
@@ -90,9 +96,17 @@ public class MouseHunter {
 
     private void setupScene() {
         Vec ballPos = model.getOrigin();
-        Ball ball = new Ball(20, ballPos, Color.orange);
+        Vec ballVellSelf = new Vec(0.0, 0.0);
+        Ball ball = new Ball("ball", 15, ballPos, Color.orange);
+        ball.setBouncy(true);
         ball.setVisible(true);
+        VectorArrow ballAcc = new VectorArrow("Acc", ballVellSelf, ballPos, 10, Color.red);
+        VectorArrow ballVel = new VectorArrow("Vel", ballVellSelf, ballPos, 10, Color.yellow);
+        ballAcc.setVisible(true);
+        ballVel.setVisible(true);
         model.addObject(ball);
+        model.addObject(ballAcc);
+        model.addObject(ballVel);
         model.setShowComponents(true);
     }
 

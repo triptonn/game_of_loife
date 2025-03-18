@@ -12,11 +12,15 @@ public interface SceneObject {
 
     Vec getLocation();
 
+    String getName();
+
+    void setName(String name);
+
     boolean isVisible();
 
     void setVisible(boolean visible);
 
     void setColor(Color color);
 
-	Color getColor();
+    Color getColor();
 }

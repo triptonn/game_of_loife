@@ -1,5 +1,7 @@
 package data;
 
+import java.awt.event.*;
+
 public class Vec {
     private final int n;
     public double[] data;
@@ -112,6 +114,30 @@ public class Vec {
             throw new ArithmeticException("zero-vector has no direction");
         }
         return this.scale(1.0 / this.mag());
+    }
+
+    public Vec negate() {
+        Vec negated = new Vec(n);
+        for (int i = 0; i < n; i++) {
+            negated.data[i] = -1 * this.data[i];
+            ;
+        }
+        return negated;
+    }
+
+    public Vec reflect2D(int axis) {
+        if (this.n != 2) {
+        	return this;
+        }
+        Vec reflected = new Vec(n);
+        if (axis == 0) {
+            reflected.data[0] = this.data[0];
+            reflected.data[1] = -this.data[1];
+        } else {
+            reflected.data[0] = -this.data[0];
+            reflected.data[1] = this.data[1];
+        }
+        return reflected;
     }
 
     public String toString() {

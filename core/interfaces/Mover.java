@@ -3,8 +3,6 @@ package interfaces;
 import data.Vec;
 
 public interface Mover {
-    void update();
-
     void applyForce(Vec force);
 
     Vec getLocation();

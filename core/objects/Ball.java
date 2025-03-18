@@ -14,13 +14,15 @@ public class Ball implements Mover, SceneObject {
     private Vec vel;
     private Vec acc;
 
+    private String name;
+
     private Color color;
     private boolean isVisible = false;
-
     private boolean isBouncy = false;
-    private boolean isCollidable = false;
+    private double bounceFactor = 0.95;
 
-    public Ball(int radius, Vec location, Color color) {
+    public Ball(String name, int radius, Vec location, Color color) {
+        this.name = name;
         this.radius = radius;
 
         this.loc = location;
@@ -32,14 +34,9 @@ public class Ball implements Mover, SceneObject {
 
     @Override
     public void update() {
-        System.out.println("Updating ball");
-        System.out.println("acc: " + this.acc.toString());
-
         this.vel = this.vel.plus(acc);
-        System.out.println("vel: " + this.vel.toString());
-
         this.loc = this.loc.plus(vel);
-        System.out.println("loc: " + this.loc.toString());
+        this.acc = this.acc.scale(0);
     }
 
     @Override
@@ -57,7 +54,11 @@ public class Ball implements Mover, SceneObject {
 
     @Override
     public void applyForce(Vec force) {
-        this.acc = force;
+        this.acc = this.acc.plus(force);
+    }
+
+    public void bounce(boolean isHorizontal) {
+        this.vel = this.vel.reflect2D(isHorizontal ? 1 : 0).scale(this.bounceFactor);
     }
 
     public int getRadius() {
@@ -80,6 +81,16 @@ public class Ball implements Mover, SceneObject {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public Color getColor() {
         return this.color;
     }
@@ -97,5 +108,17 @@ public class Ball implements Mover, SceneObject {
     @Override
     public void setVisible(boolean visible) {
         this.isVisible = visible;
+    }
+
+    public boolean isBouncy() {
+        return this.isBouncy;
+    }
+
+    public void setBouncy(boolean bouncy) {
+        this.isBouncy = bouncy;
+    }
+
+    public void setBounceFactor(double factor) {
+        this.bounceFactor = factor;
     }
 }

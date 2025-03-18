@@ -15,7 +15,7 @@ public class ScenePanel extends JPanel {
         this.model = model;
         this.renderer = new SceneRenderer();
 
-        setPreferredSize(new Dimension(MouseHunter.WINDOW_WIDTH - 40, MouseHunter.WINDOW_HEIGHT - 40));
+        setPreferredSize(new Dimension(MouseHunter.WINDOW_WIDTH + 40, MouseHunter.WINDOW_HEIGHT + 20));
         setBackground(Color.black);
     }
 

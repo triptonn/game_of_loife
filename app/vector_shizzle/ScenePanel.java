@@ -1,17 +1,9 @@
 package vector_shizzle;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
-
-import data.Vec;
 
 public class ScenePanel extends JPanel {
     private final SceneModel model;
@@ -21,27 +13,6 @@ public class ScenePanel extends JPanel {
         this.model = model;
         this.renderer = new SceneRenderer();
 
-        setPreferredSize(new Dimension(800, 600));
-        setBackground(Color.black);
-
-        addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                model.setMousePos(new Vec(e.getX(), e.getY()));
-                repaint();
-            }
-        });
-
-        setFocusable(true);
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    model.toggleShowComponents();
-                    repaint();
-                }
-            }
-        });
     }
 
     @Override
