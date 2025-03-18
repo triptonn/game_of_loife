@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import data.Vec;
+
 public class ScenePanel extends JPanel {
     private final SceneModel model;
     private final SceneRenderer renderer;

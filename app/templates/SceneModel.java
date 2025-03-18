@@ -1,7 +1,12 @@
-package vector_shizzle;
+package templates;
+
+import interfaces.Mover;
+import interfaces.SceneObject;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+
+import data.Vec;
 
 public class SceneModel {
     private boolean isShowComponents = false;

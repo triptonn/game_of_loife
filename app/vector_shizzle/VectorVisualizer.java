@@ -8,7 +8,7 @@ public class VectorVisualizer {
     private static Timer sceneTimer;
     private final SceneModel model;
     private final ScenePanel panel;
-    private static final JFrame frame;
+    private static JFrame frame;
 
     static final int WINDOW_WIDTH = 1320;
     static final int WINDOW_HEIGHT = 760;
@@ -22,17 +22,21 @@ public class VectorVisualizer {
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
-    public static void start() {
-        if (sceneTimer != null) {
-            sceneTimer = new Timer(16, e -> {
-                updateSceneState();
-                panel.repaint();
-            });
+    public void startLoop() {
+
+        if (sceneTimer != null && sceneTimer.isRunning()) {
+            return;
         }
+
+        sceneTimer = new Timer(16, e -> {
+            updateSceneState();
+            panel.repaint();
+        });
+
         sceneTimer.start();
-        frame.setVisible(true);
     }
 
     public void stopGameLoop() {
@@ -43,11 +47,17 @@ public class VectorVisualizer {
         System.out.println("Run finished!");
     };
 
-    private static void updateSceneState() {
+    private void updateSceneState() {
         // Game logic
     };
 
+    private void setupScene() {
+
+    }
+
     public static void main(String[] args) {
-        start();
+        VectorVisualizer vv = new VectorVisualizer();
+        vv.setupScene();
+        vv.startLoop();
     }
 }

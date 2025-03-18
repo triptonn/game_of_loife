@@ -1,7 +1,9 @@
-package vector_shizzle;
+package interfaces;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+
+import data.Vec;
 
 public interface SceneObject {
     void update();
@@ -16,5 +18,5 @@ public interface SceneObject {
 
     void setColor(Color color);
 
-    public Color getColor();
+	Color getColor();
 }

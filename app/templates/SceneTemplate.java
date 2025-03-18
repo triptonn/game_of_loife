@@ -1,10 +1,12 @@
-package vector_shizzle;
+package templates;
 
 import javax.swing.Timer;
-
 import javax.swing.JFrame;
 
 public class SceneTemplate {
+	public static int WINDOW_WIDTH = 1320;
+	public static int WINDOW_HEIGHT = 760;
+
     private Timer sceneTimer;
     private final SceneModel model;
     private final ScenePanel panel;
@@ -21,8 +23,8 @@ public class SceneTemplate {
         frame.setLocationRelativeTo(null);
     }
 
-    public void start() {
-        if (sceneTimer != null) {
+    public void startLoop() {
+        if (sceneTimer == null) {
             sceneTimer = new Timer(16, e -> {
                 updateSceneState();
                 panel.repaint();
@@ -32,15 +34,24 @@ public class SceneTemplate {
         frame.setVisible(true);
     }
 
-    public void stopGameLoop() {
+    public void stopLoop() {
         if (sceneTimer != null) {
             sceneTimer.stop();
         }
-
-        System.out.println("Run finished!");
     };
 
     private void updateSceneState() {
         // Game logic
     };
+
+    private void setupScene() {
+        // Scene setup
+    }
+
+    public static void main(String[] args) {
+        SceneTemplate st = new SceneTemplate();
+        st.setupScene();
+        st.startLoop();
+    }
+
 }

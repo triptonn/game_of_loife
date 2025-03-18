@@ -1,4 +1,4 @@
-package game_of_loife;
+package ui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -11,6 +11,9 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import java.awt.List;
 import java.io.File;
+
+import game_of_loife.GofGui;
+import game_of_loife.BoardIO;
 
 public class SaveMenu extends JDialog {
     private static final long serialVersionUID = 1L;

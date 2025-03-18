@@ -1,4 +1,4 @@
-package vector_shizzle;
+package data;
 
 public class Vec {
     private final int n;

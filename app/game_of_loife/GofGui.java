@@ -1,6 +1,10 @@
 package game_of_loife;
 
 import javax.swing.SpringLayout;
+
+import ui.LoadMenu;
+import ui.SaveMenu;
+
 import javax.swing.JViewport;
 import java.awt.Point;
 import javax.swing.JScrollPane;

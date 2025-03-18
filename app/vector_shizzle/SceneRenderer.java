@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import data.Vec;
+
 public class SceneRenderer {
     private static final int ARROW_SIZE = 10;
 

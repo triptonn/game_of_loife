@@ -1,4 +1,6 @@
-package vector_shizzle;
+package interfaces;
+
+import data.Vec;
 
 public interface Mover {
     void update();
