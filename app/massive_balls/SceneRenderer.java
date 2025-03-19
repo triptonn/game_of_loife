@@ -2,13 +2,19 @@ package massive_balls;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import data.Vec;
 
 public class SceneRenderer {
+    private Dimension scene;
     private static final int ARROW_SIZE = 10;
+
+    SceneRenderer(Dimension scene) {
+        this.scene = scene;
+    }
 
     public void render(Graphics2D g2d, SceneModel model) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -81,10 +87,10 @@ public class SceneRenderer {
      */
 
     private int getHeight() {
-        return MassiveBalls.WINDOW_HEIGHT;
+        return scene.width;
     }
 
     private int getWidth() {
-        return MassiveBalls.WINDOW_WIDTH;
+        return scene.height;
     }
 }

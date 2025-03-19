@@ -1,12 +1,12 @@
 package massive_balls;
 
-import objects.Ball;
 import objects.SceneObject;
 
 import interfaces.Movable;
 import interfaces.Renderable;
 import interfaces.Updateable;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -20,11 +20,15 @@ public class SceneModel {
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
 
-    private Vec origin = new Vec(MassiveBalls.WINDOW_WIDTH / 2, MassiveBalls.WINDOW_HEIGHT / 2);
+    private Dimension dim;
+    private Vec origin;
 
     private Vec mousePos = origin;
 
-    public SceneModel() {
+    public SceneModel(Dimension scene) {
+        this.dim = scene;
+        this.origin = new Vec(this.dim.width / 2, this.dim.height / 2);
+
         objects = new ArrayList<>();
         movers = new ArrayList<>();
         renderers = new ArrayList<>();
@@ -48,21 +52,7 @@ public class SceneModel {
 
     public void update() {
         for (Movable mover : movers) {
-            if (mover instanceof Ball) {
-                Ball ball = (Ball) mover;
-                if (ball.isBouncy()) {
-                    int locX = (int) ball.getLocation().x();
-                    int locY = (int) ball.getLocation().y();
-
-                    if (locX > MassiveBalls.WINDOW_WIDTH
-                            || locX < 0) {
-                        ball.bounce(true);
-                    } else if (locY > MassiveBalls.WINDOW_HEIGHT
-                            || locY < 0) {
-                        ball.bounce(false);
-                    }
-                }
-            }
+            // stuff for all movers
         }
 
         for (Updateable updater : updaters) {
@@ -70,7 +60,7 @@ public class SceneModel {
         }
 
         for (SceneObject object : objects) {
-            // stuff for all children of SceneObject
+            // stuff for all objects in the scene
         }
     }
 
@@ -96,6 +86,10 @@ public class SceneModel {
 
     public boolean isShowComponents() {
         return isShowComponents;
+    }
+
+    public Dimension getDimensions() {
+        return this.dim;
     }
 
     public Vec getOrigin() {

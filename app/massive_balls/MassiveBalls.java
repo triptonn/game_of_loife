@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.Random;
@@ -22,18 +23,33 @@ public class MassiveBalls {
     private final ScenePanel panel;
     private final JFrame frame;
 
-    public static int WINDOW_WIDTH = 1280;
-    public static int WINDOW_HEIGHT = 720;
+    public Dimension dim = new Dimension(1280, 720);
 
     private static double[] draggedPos = new double[2];
 
+    private boolean isWindy = false;
+
     public MassiveBalls() {
-        model = new SceneModel();
+        model = new SceneModel(dim);
         panel = new ScenePanel(model);
         frame = new JFrame("MassiveBalls");
 
-        panel.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        panel.setPreferredSize(dim);
         panel.setBackground(Color.black);
+
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    isWindy = true;
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                isWindy = false;
+            }
+        });
 
         panel.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -47,6 +63,7 @@ public class MassiveBalls {
                 model.setMousePos(new Vec(e.getX(), e.getY()));
                 panel.repaint();
             }
+
         });
 
         panel.setFocusable(true);
@@ -87,9 +104,13 @@ public class MassiveBalls {
 
     private void update() {
         Vec gravity = new Vec(0.0, 0.3);
+        Vec wind = new Vec(-0.8, -0.20);
 
         for (Movable m : model.getMovers()) {
-            m.applyForce(gravity);
+            m.applyForce(gravity.scale(m.getMass()));
+            if (isWindy) {
+                m.applyForce(wind);
+            }
         }
 
         model.update();
@@ -98,18 +119,18 @@ public class MassiveBalls {
     private void setupScene() {
         Random r = new Random();
         for (int i = 0; i < 7; i++) {
-            double x = r.nextGaussian() * 320 + 640;
+            double x = r.nextGaussian() * 260 + 640;
             double y = r.nextGaussian() * 140 + 260;
 
             int radius;
-            do {
-                radius = r.nextInt(10) * 5;
-            } while (radius < 5);
+            double mass;
+            radius = (r.nextInt(9) + 1) * 2;
+            mass = radius * 3;
 
             System.out.println("Vec(" + x + ", " + y + "), r = " + radius);
 
             Vec spawn = new Vec(x, y);
-            Ball b = new Ball("ball" + i, radius, spawn, Color.orange);
+            Ball b = new Ball("ball" + i, radius, mass, spawn, dim, Color.orange);
             b.setBouncy(true);
             b.setVisible(true);
             model.addObject(b);
