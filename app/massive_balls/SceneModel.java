@@ -1,9 +1,10 @@
-package templates;
+package massive_balls;
+
+import objects.SceneObject;
 
 import interfaces.Movable;
 import interfaces.Renderable;
 import interfaces.Updateable;
-import objects.SceneObject;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class SceneModel {
         }
 
         for (SceneObject object : objects) {
-            // for updates to all objects
+            // stuff for all children of SceneObject
         }
     }
 

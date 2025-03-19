@@ -2,7 +2,7 @@ package interfaces;
 
 import data.Vec;
 
-public interface Mover {
+public interface Movable {
     void applyForce(Vec force);
 
     Vec getLocation();

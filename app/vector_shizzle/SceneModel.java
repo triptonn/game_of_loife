@@ -1,7 +1,9 @@
 package vector_shizzle;
 
-import interfaces.Mover;
-import interfaces.SceneObject;
+import interfaces.Movable;
+import interfaces.Renderable;
+import interfaces.Updateable;
+import objects.SceneObject;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -12,7 +14,9 @@ public class SceneModel {
     private boolean isShowComponents = false;
 
     private ArrayList<SceneObject> objects;
-    private ArrayList<Mover> movers;
+    private ArrayList<Movable> movers;
+    private ArrayList<Renderable> renderers;
+    private ArrayList<Updateable> updaters;
 
     private Vec origin = new Vec(
             (VectorVisualizer.WINDOW_WIDTH - 40) / 2,
@@ -23,30 +27,44 @@ public class SceneModel {
     public SceneModel() {
         objects = new ArrayList<>();
         movers = new ArrayList<>();
+        renderers = new ArrayList<>();
+        updaters = new ArrayList<>();
     }
 
     public void addObject(SceneObject obj) {
         objects.add(obj);
-        if (obj instanceof Mover) {
-            movers.add((Mover) obj);
+        if (obj instanceof Movable) {
+            movers.add((Movable) obj);
+        }
+
+        if (obj instanceof Renderable) {
+            renderers.add((Renderable) obj);
+        }
+
+        if (obj instanceof Updateable) {
+            updaters.add((Updateable) obj);
         }
     }
 
     public void update() {
-        for (Mover mover : movers) {
+        for (Movable mover : movers) {
             Vec force = new Vec(0.0, 0.02);
             mover.applyForce(force);
         }
 
-        for (SceneObject obj : objects) {
-            obj.update();
+        for (Updateable updater : updaters) {
+            updater.update();
+        }
+
+        for (SceneObject object : objects) {
+            // for updates to all objects
         }
     }
 
     public void render(Graphics2D g2d) {
-        for (SceneObject obj : objects) {
-            if (obj.isVisible()) {
-                obj.render(g2d);
+        for (Renderable r : renderers) {
+            if (r.isVisible()) {
+                r.render(g2d);
             }
         }
     }

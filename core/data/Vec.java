@@ -1,7 +1,5 @@
 package data;
 
-import java.awt.event.*;
-
 public class Vec {
     private final int n;
     public double[] data;
@@ -127,7 +125,7 @@ public class Vec {
 
     public Vec reflect2D(int axis) {
         if (this.n != 2) {
-        	return this;
+            return this;
         }
         Vec reflected = new Vec(n);
         if (axis == 0) {

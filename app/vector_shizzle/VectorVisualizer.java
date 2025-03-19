@@ -85,11 +85,21 @@ public class VectorVisualizer {
     };
 
     private void setupScene() {
-        Vec funVec = new Vec(-200, 300);
-        Vec funVecOrigin = new Vec(300, 200);
-        VectorArrow vecti = new VectorArrow("funVec", funVec, funVecOrigin, 20, Color.red);
-        vecti.setVisible(true);
-        model.addObject(vecti);
+        Vec A = new Vec(200, 500);
+        Vec B = new Vec(800, 500);
+        // Vec C = new Vec(800, 200);
+        Vec a = new Vec(600, 0);
+        Vec b = new Vec(0, -300);
+        Vec c = new Vec(600, -300);
+        VectorArrow aVec = new VectorArrow("a", a, A, 10, Color.red);
+        VectorArrow bVec = new VectorArrow("b", b, B, 10, Color.yellow);
+        VectorArrow cVec = new VectorArrow("c", c, A, 10, Color.green);
+        aVec.setVisible(true);
+        bVec.setVisible(true);
+        cVec.setVisible(true);
+        model.addObject(aVec);
+        model.addObject(bVec);
+        model.addObject(cVec);
         model.setShowComponents(true);
     }
 

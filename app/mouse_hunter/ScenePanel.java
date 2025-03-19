@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class ScenePanel extends JPanel {
+	static final long serialVersionUID = 1004002001008008002L;
+
     private final SceneModel model;
     private final SceneRenderer renderer;
 

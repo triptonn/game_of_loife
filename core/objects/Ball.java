@@ -4,28 +4,28 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import data.Vec;
-import interfaces.Mover;
-import interfaces.SceneObject;
+import interfaces.Movable;
+import interfaces.Renderable;
+import interfaces.Updateable;
 
-public class Ball implements Mover, SceneObject {
+public class Ball extends SceneObject implements Movable, Renderable, Updateable {
     private int radius;
 
     private Vec loc;
     private Vec vel;
     private Vec acc;
 
-    private String name;
-
     private Color color;
     private boolean isVisible = false;
     private boolean isBouncy = false;
     private double bounceFactor = 0.95;
 
-    public Ball(String name, int radius, Vec location, Color color) {
+    public Ball(String name, int radius, Vec loc, Color color) {
+        super(name, loc);
         this.name = name;
         this.radius = radius;
 
-        this.loc = location;
+        this.loc = loc;
         this.vel = new Vec(0.0, 0.0);
         this.acc = new Vec(0.0, 0.0);
 
@@ -43,8 +43,6 @@ public class Ball implements Mover, SceneObject {
     public void render(Graphics2D g2d) {
         if (!isVisible)
             return;
-
-        System.out.println("Rendering ball");
         g2d.setColor(color);
         g2d.fillOval(((int) this.loc.x() - this.radius),
                 ((int) this.loc.y() - this.radius),
@@ -78,16 +76,6 @@ public class Ball implements Mover, SceneObject {
     @Override
     public Vec getAcceleration() {
         return this.acc;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override

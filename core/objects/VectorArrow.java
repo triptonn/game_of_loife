@@ -5,22 +5,20 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import data.Vec;
-import interfaces.SceneObject;
+import interfaces.Inert;
+import interfaces.Renderable;
+import interfaces.Updateable;
 
-public class VectorArrow implements SceneObject {
+public class VectorArrow extends SceneObject implements Inert, Renderable, Updateable {
     private Vec self;
-    private Vec origin;
-
-    private String name;
 
     private Color color;
     private boolean isVisible;
     private int ARROW_SIZE;
 
-    public VectorArrow(String name, Vec self, Vec origin, int arrowSize, Color color) {
-        this.name = name;
+    public VectorArrow(String name, Vec self, Vec loc, int arrowSize, Color color) {
+        super(name, loc);
         this.self = self;
-        this.origin = origin;
         this.ARROW_SIZE = arrowSize;
         this.color = color;
     }
@@ -29,9 +27,8 @@ public class VectorArrow implements SceneObject {
     public void update() {
     }
 
-    public void update(Vec self, Vec origin) {
+    public void update(Vec self) {
         this.self = self;
-        this.origin = origin;
     };
 
     @Override
@@ -43,12 +40,12 @@ public class VectorArrow implements SceneObject {
         g2d.setColor(color);
         g2d.setStroke(new BasicStroke(2));
 
-        Vec end = origin.plus(this.self);
+        Vec end = loc.plus(this.self);
 
-        g2d.drawLine((int) origin.x(), (int) origin.y(),
+        g2d.drawLine((int) this.loc.x(), (int) this.loc.y(),
                 (int) end.x(), (int) end.y());
 
-        Vec direction = end.minus(this.origin);
+        Vec direction = end.minus(this.loc);
         Vec normalized = direction.norm();
 
         Vec perp = new Vec(-normalized.y(), normalized.x());
@@ -65,15 +62,11 @@ public class VectorArrow implements SceneObject {
     }
 
     public Vec getLocation() {
-        return this.origin;
+        return this.loc;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setLocation(Vec loc) {
+        this.loc = loc;
     }
 
     public Color getColor() {
