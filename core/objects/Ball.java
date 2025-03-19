@@ -10,6 +10,7 @@ import interfaces.Updateable;
 
 public class Ball extends SceneObject implements Movable, Renderable, Updateable {
     private int radius;
+    private double mass;
 
     private Vec loc;
     private Vec vel;
@@ -76,6 +77,16 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     @Override
     public Vec getAcceleration() {
         return this.acc;
+    }
+
+    @Override
+    public double getMass() {
+        return this.mass;
+    }
+
+    @Override
+    public void setMass(double m) {
+        this.mass = m;
     }
 
     @Override

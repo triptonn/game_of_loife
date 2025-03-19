@@ -1,5 +1,6 @@
 package massive_balls;
 
+import objects.Ball;
 import objects.SceneObject;
 
 import interfaces.Movable;
@@ -19,7 +20,7 @@ public class SceneModel {
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
 
-    private Vec origin = new Vec(400.0, 300.0);
+    private Vec origin = new Vec(MassiveBalls.WINDOW_WIDTH / 2, MassiveBalls.WINDOW_HEIGHT / 2);
 
     private Vec mousePos = origin;
 
@@ -47,8 +48,21 @@ public class SceneModel {
 
     public void update() {
         for (Movable mover : movers) {
-            Vec force = new Vec(0.0, 0.02);
-            mover.applyForce(force);
+            if (mover instanceof Ball) {
+                Ball ball = (Ball) mover;
+                if (ball.isBouncy()) {
+                    int locX = (int) ball.getLocation().x();
+                    int locY = (int) ball.getLocation().y();
+
+                    if (locX > MassiveBalls.WINDOW_WIDTH
+                            || locX < 0) {
+                        ball.bounce(true);
+                    } else if (locY > MassiveBalls.WINDOW_HEIGHT
+                            || locY < 0) {
+                        ball.bounce(false);
+                    }
+                }
+            }
         }
 
         for (Updateable updater : updaters) {
@@ -74,6 +88,10 @@ public class SceneModel {
 
     public ArrayList<SceneObject> getObjects() {
         return objects;
+    }
+
+    public ArrayList<Movable> getMovers() {
+        return movers;
     }
 
     public boolean isShowComponents() {

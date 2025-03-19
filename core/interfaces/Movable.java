@@ -10,4 +10,8 @@ public interface Movable {
     Vec getVelocity();
 
     Vec getAcceleration();
+
+    double getMass();
+
+    void setMass(double m);
 }
