@@ -90,10 +90,11 @@ public class VectorVisualizer {
         // Vec C = new Vec(800, 200);
         Vec a = new Vec(600, 0);
         Vec b = new Vec(0, -300);
-        Vec c = new Vec(600, -300);
-        VectorArrow aVec = new VectorArrow("a", a, A, 10, Color.red);
-        VectorArrow bVec = new VectorArrow("b", b, B, 10, Color.yellow);
-        VectorArrow cVec = new VectorArrow("c", c, A, 10, Color.green);
+        Vec c = new Vec(600, -300); 
+        Dimension dim = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT); 
+        VectorArrow aVec = new VectorArrow("a", a, A, 10, dim, Color.red);
+        VectorArrow bVec = new VectorArrow("b", b, B, 10, dim, Color.yellow);
+        VectorArrow cVec = new VectorArrow("c", c, A, 10, dim, Color.green);
         aVec.setVisible(true);
         bVec.setVisible(true);
         cVec.setVisible(true);

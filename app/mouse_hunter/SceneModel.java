@@ -105,9 +105,9 @@ public class SceneModel {
             if (updater instanceof VectorArrow) {
                 VectorArrow arrow = (VectorArrow) updater;
                 if (arrow.getName() == "Acc") {
-                    arrow.update(this.ballAcc.scale(1000));
+                    arrow.update(this.ballAcc.scale(10000));
                 } else if (arrow.getName() == "Vel") {
-                    arrow.update(this.ballVel.scale(10));
+                    arrow.update(this.ballVel.scale(100));
                 }
             } else {
                 updater.update();

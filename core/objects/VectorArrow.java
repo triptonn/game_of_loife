@@ -3,6 +3,7 @@ package objects;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Dimension;
 
 import data.Vec;
 import interfaces.Inert;
@@ -16,8 +17,8 @@ public class VectorArrow extends SceneObject implements Inert, Renderable, Updat
     private boolean isVisible;
     private int ARROW_SIZE;
 
-    public VectorArrow(String name, Vec self, Vec loc, int arrowSize, Color color) {
-        super(name, loc);
+    public VectorArrow(String name, Vec self, Vec loc, int arrowSize, Dimension dim, Color color) {
+        super(name, loc, dim);
         this.self = self;
         this.ARROW_SIZE = arrowSize;
         this.color = color;
