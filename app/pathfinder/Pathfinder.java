@@ -1,27 +1,18 @@
-package templates;
+package pathfinder;
 
 import javax.swing.Timer;
-
-import data.Vec;
-
-import java.awt.Dimension;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JFrame;
 
-public class SceneTemplate {
-
-    public Dimension dim = new Dimension(1280, 720);
+public class Pathfinder {
+    public static int WINDOW_WIDTH = 1280;
+    public static int WINDOW_HEIGHT = 720;
 
     private Timer sceneTimer;
     private final SceneModel model;
     private final ScenePanel panel;
     private final JFrame frame;
 
-    public SceneTemplate() {
+    public Pathfinder() {
         model = new SceneModel();
         panel = new ScenePanel(model);
         frame = new JFrame("Scene");
@@ -30,25 +21,6 @@ public class SceneTemplate {
         frame.add(panel);
         frame.pack();
         frame.setLocationRelativeTo(null);
-
-        panel.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                model.setMousePos(new Vec(e.getX(), e.getY()));
-                panel.repaint();
-            }
-        });
-
-        panel.setFocusable(true);
-        panel.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    model.toggleShowComponents();
-                    panel.repaint();
-                }
-            }
-        });
     }
 
     public void startLoop() {
@@ -77,7 +49,7 @@ public class SceneTemplate {
     }
 
     public static void main(String[] args) {
-        SceneTemplate st = new SceneTemplate();
+        Pathfinder st = new Pathfinder();
         st.setupScene();
         st.startLoop();
     }

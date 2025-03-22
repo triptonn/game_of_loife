@@ -2,19 +2,15 @@ package templates;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
 import data.Vec;
 
 public class SceneRenderer {
-    private Dimension scene;
     private static final int ARROW_SIZE = 10;
-
-    public SceneRenderer(Dimension scene) {
-        this.scene = scene;
-    }
 
     public void render(Graphics2D g2d, SceneModel model) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -35,6 +31,32 @@ public class SceneRenderer {
         drawArrowHead(g2d, origin, end);
     }
 
+    /*
+     * private void drawComponents(Graphics2D g2d, Vec origin, Vec vector, Color
+     * color) {
+     * g2d.setColor(color);
+     * g2d.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT,
+     * BasicStroke.JOIN_BEVEL, 0, new float[] { 5 }, 0));
+     * 
+     * Vec xComponent = new Vec(vector.x(), 0);
+     * g2d.drawLine((int) origin.x(), (int) origin.y(), (int) (origin.x() +
+     * xComponent.x()), (int) origin.y());
+     * 
+     * Vec yComponent = new Vec(0, vector.y());
+     * g2d.drawLine((int) origin.x(), (int) origin.y(), (int) origin.x(), (int)
+     * (origin.y() + yComponent.y()));
+     * 
+     * g2d.setFont(new Font("Arial", Font.PLAIN, 12));
+     * g2d.drawString(String.format("x: %.1f", vector.x()),
+     * (int) (origin.x() + (xComponent.x() / 2)),
+     * (int) origin.y() - 5);
+     * 
+     * g2d.drawString(String.format("y: %.1f", vector.y()),
+     * (int) origin.x() - 25,
+     * (int) (origin.y() + (yComponent.y() / 2)));
+     * }
+     */
+
     private void drawArrowHead(Graphics2D g2d, Vec start, Vec end) {
         Vec direction = end.minus(start);
         Vec normalized = direction.norm();
@@ -51,11 +73,20 @@ public class SceneRenderer {
         g2d.fillPolygon(xPoints, yPoints, 3);
     }
 
+    /*
+     * private void drawMouseInteraction(Graphics2D g2d, SceneModel model) {
+     * g2d.setColor(new Color(255, 255, 255, 100));
+     * g2d.setStroke(new BasicStroke());
+     * g2d.drawLine((int) model.getOrigin().x(), (int) model.getOrigin().y(),
+     * (int) model.getMousePos().x(), (int) model.getMousePos().y());
+     * }
+     */
+
     private int getHeight() {
-        return (int) this.scene.getHeight();
+        return Pathfinder.WINDOW_HEIGHT;
     }
 
     private int getWidth() {
-        return (int) this.scene.getWidth();
+        return Pathfinder.WINDOW_WIDTH;
     }
 }
