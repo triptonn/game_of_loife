@@ -13,7 +13,7 @@ public class ScenePanel extends JPanel {
 
     public ScenePanel(SceneModel model) {
         this.model = model;
-        this.renderer = new SceneRenderer();
+        this.renderer = new SceneRenderer(this.model.getDimensions());
 
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.black);

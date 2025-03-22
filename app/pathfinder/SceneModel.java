@@ -1,4 +1,4 @@
-package templates;
+package pathfinder;
 
 import interfaces.Movable;
 import interfaces.Renderable;

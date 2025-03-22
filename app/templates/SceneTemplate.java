@@ -22,7 +22,7 @@ public class SceneTemplate {
     private final JFrame frame;
 
     public SceneTemplate() {
-        model = new SceneModel();
+        model = new SceneModel(this.dim);
         panel = new ScenePanel(model);
         frame = new JFrame("Scene");
 

@@ -5,6 +5,7 @@ import interfaces.Renderable;
 import interfaces.Updateable;
 import objects.SceneObject;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -17,12 +18,16 @@ public class SceneModel {
     private ArrayList<Movable> movers;
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
-
-    private Vec origin = new Vec(400.0, 300.0);
+    
+    private Dimension dim;
+    private Vec origin;
 
     private Vec mousePos = origin;
 
-    public SceneModel() {
+    public SceneModel(Dimension scene) {
+    	this.dim = scene;
+    	this.origin = new Vec(this.dim.width / 2, this.dim.height / 2);
+
         objects = new ArrayList<>();
         movers = new ArrayList<>();
         renderers = new ArrayList<>();
@@ -77,6 +82,10 @@ public class SceneModel {
 
     public boolean isShowComponents() {
         return isShowComponents;
+    }
+    
+    public Dimension getDimensions() {
+    	return this.dim;
     }
 
     public Vec getOrigin() {
