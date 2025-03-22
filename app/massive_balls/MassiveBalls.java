@@ -104,7 +104,7 @@ public class MassiveBalls {
 
     private void update() {
         Vec gravity = new Vec(0.0, 0.3);
-        Vec wind = new Vec(-0.8, -0.20);
+        Vec wind = new Vec(1.8, -0.20);
 
         for (Movable m : model.getMovers()) {
             m.applyForce(gravity.scale(m.getMass()));
@@ -117,14 +117,14 @@ public class MassiveBalls {
     };
 
     private void setupScene() {
-        Random r = new Random();
-        for (int i = 0; i < 7; i++) {
-            int x = (int) r.nextGaussian() * 260 + 640;
-            int y = (int) r.nextGaussian() * 140 + 260;
+        Random r = new Random(725630);
+        for (int i = 0; i < 20; i++) {
+            int x = (int) (r.nextGaussian() * 360) + 640;
+            int y = (int) (r.nextGaussian() * 240) + 260;
 
             int radius;
             double mass;
-            radius = (r.nextInt(9) + 1) * 2;
+            radius = (r.nextInt(10) + 2) * 2;
             mass = radius * 3;
 
             System.out.println("Vec(" + x + ", " + y + "), r = " + radius);
