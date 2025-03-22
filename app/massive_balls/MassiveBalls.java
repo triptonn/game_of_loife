@@ -119,8 +119,8 @@ public class MassiveBalls {
     private void setupScene() {
         Random r = new Random();
         for (int i = 0; i < 7; i++) {
-            double x = r.nextGaussian() * 260 + 640;
-            double y = r.nextGaussian() * 140 + 260;
+            int x = (int) r.nextGaussian() * 260 + 640;
+            int y = (int) r.nextGaussian() * 140 + 260;
 
             int radius;
             double mass;

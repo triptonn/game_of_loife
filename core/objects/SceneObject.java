@@ -6,8 +6,8 @@ import data.Vec;
 
 public class SceneObject {
     public String name;
-    public Vec loc;
-    private Dimension scene;
+    protected Vec loc;
+    protected Dimension scene;
 
     public SceneObject(String name, Vec loc, Dimension scene) {
         this.name = name;
