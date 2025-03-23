@@ -4,6 +4,7 @@ import javax.swing.Timer;
 
 import data.Vec;
 import objects.Box;
+import objects.MoBox;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -79,10 +80,16 @@ public class BoxDraw {
 
     private void setupScene() {
         Vec boxLoc = new Vec(300, 300);
+        Vec moboxLoc = new Vec(700, 300);
 
-        Box box = new Box("test", boxLoc, 680, 200, dim, Color.blue);
+        Box box = new Box("test", boxLoc, 300, 150, dim, Color.blue);
         box.setVisible(true);
         model.addObject(box);
+
+        MoBox mobox = new MoBox("testi", moboxLoc, 300, 150, dim, Color.red);
+        mobox.setVisible(true);
+        model.addObject(mobox);
+
         model.setShowComponents(true);
     }
 
