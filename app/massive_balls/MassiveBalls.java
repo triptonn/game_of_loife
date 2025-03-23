@@ -27,7 +27,8 @@ public class MassiveBalls {
 
     private static double[] draggedPos = new double[2];
 
-    private boolean isWindy = false;
+    private boolean windyLeft = false;
+    private boolean windyRight = false;
 
     public MassiveBalls() {
         model = new SceneModel(dim);
@@ -41,13 +42,24 @@ public class MassiveBalls {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    isWindy = true;
+                    windyRight = true;
+                }
+
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    windyLeft = true;
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                isWindy = false;
+                if (windyLeft == true) {
+                    windyLeft = false;
+                }
+
+                if (windyRight == true) {
+                    windyRight = false;
+                }
+
             }
         });
 
@@ -104,21 +116,30 @@ public class MassiveBalls {
 
     private void update() {
         Vec gravity = new Vec(0.0, 0.3);
-        Vec wind = new Vec(1.8, -0.20);
+        Vec wind_right = new Vec(-10.0, 0.0);
+        Vec wind_left = new Vec(10.0, 0.0);
 
         for (Movable m : model.getMovers()) {
             m.applyForce(gravity.scale(m.getMass()));
-            if (isWindy) {
-                m.applyForce(wind);
+            if (windyRight) {
+                m.applyForce(wind_right);
+            }
+
+            if (windyLeft) {
+                m.applyForce(wind_left);
+            }
+
+            if (m.isLanded()) {
+                Vec friction = new Vec(m.getVelocity().norm().scale(m.getFrictionCoefficient()));
+                m.applyForce(friction);
             }
         }
-
         model.update();
     };
 
     private void setupScene() {
         Random r = new Random(725630);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             int x = (int) (r.nextGaussian() * 360) + 640;
             int y = (int) (r.nextGaussian() * 240) + 260;
 
@@ -135,7 +156,6 @@ public class MassiveBalls {
             b.setVisible(true);
             model.addObject(b);
         }
-
         model.setShowComponents(true);
     }
 
@@ -144,5 +164,4 @@ public class MassiveBalls {
         mb.setupScene();
         mb.startLoop();
     }
-
 }

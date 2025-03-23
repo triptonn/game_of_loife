@@ -5,8 +5,8 @@ public class Vec {
     public double[] data;
 
     public Vec() {
-        n = 2;
-        data = new double[n];
+        this.n = 2;
+        this.data = new double[n];
     };
 
     public Vec(int n) {
@@ -15,17 +15,26 @@ public class Vec {
     }
 
     public Vec(double x, double y) {
-        n = 2;
+        this.n = 2;
         this.data = new double[n];
         this.data[0] = x;
         this.data[1] = y;
     }
 
+    public Vec(Vec original) {
+        this.n = original.length();
+
+        this.data = new double[this.n];
+        for (int i = 0; i < this.n; i++) {
+            this.data[i] = original.data[i];
+        }
+    }
+
     public Vec(double[] data) {
         n = data.length;
 
-        this.data = new double[n];
-        for (int i = 0; i < n; i++) {
+        this.data = new double[this.n];
+        for (int i = 0; i < this.n; i++) {
             this.data[i] = data[i];
         }
     }

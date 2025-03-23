@@ -36,6 +36,9 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     private Color __color;
     private boolean __isVisible = false;
 
+    private boolean __hasFriction = false;
+    private double __frictionCoefficient = 0.80;
+
     private boolean __isLanded = false;
     private boolean __isSliding = false;
     private boolean __isBouncy = false;
@@ -75,20 +78,17 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
 
     @Override
     public void update() {
+        double velCutOff = 0.1;
+
         int dimX = (int) this.getDim().width;
         int dimY = (int) this.getDim().height;
-
         this.__vel = this.__vel.plus(__acc);
-
         this.__loc = this.__loc.plus(__vel);
-
         __setLoc(Math.max(Math.min(this.__loc.x(), dimX - this.__radius), 0 + this.__radius),
                 Math.max(Math.min(this.__loc.y(), dimY - this.__radius), 0 + this.__radius));
-
         this.__acc = this.__acc.scale(0);
 
         if (this.__isBouncy && !this.__isLanded) {
-            double velCutOff = 0.1;
 
             int locX = (int) this.__loc.x();
             int locY = (int) this.__loc.y();
@@ -99,28 +99,54 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
             double velDotX = this.__vel.dot(new Vec(0, -1));
             double velDotY = this.__vel.dot(new Vec(0, -1));
 
-            if (locX + __radius >= dimX && velDotX < 0 && velX >= velCutOff) {
+            if (locX + __radius >= dimX && velDotX < 0 && Math.abs(velX) >= velCutOff) {
                 locX = Math.min(locX + __radius, dimX);
-                bounce(true);
-            } else if (locX - __radius <= 0 && -velDotX < 0 && velX >= velCutOff) {
+                bounce("horizontal");
+            } else if (locX - __radius <= 0 && velDotX < 0 && Math.abs(velX) >= velCutOff) {
                 locX = Math.max(locX - __radius, 0);
-                bounce(true);
-            } else if ((locX + __radius >= dimX || locX - __radius <= 0) && velX < velCutOff) {
+                bounce("horizontal");
+            } else if ((locX + __radius >= dimX || locX - __radius <= 0) && Math.abs(velDotX) < velCutOff) {
+                locX = Math.min(locX + __radius, dimX);
                 __setVelX(0.0);
                 this.__isSliding = true;
             }
 
-            if (locY + __radius >= dimY && velDotY < 0 && velY >= velCutOff) {
+            if (locY + __radius >= dimY && velDotY < 0 && Math.abs(velY) >= velCutOff) {
                 locY = Math.min(locY + __radius, dimY);
-                bounce(false);
-            } else if (locY - __radius <= 0 && -velDotY < 0 && velY >= velCutOff) {
+                bounce("vertical");
+            } else if (locY - __radius <= 0 && -velDotY < 0 && Math.abs(velY) >= velCutOff) {
                 locY = Math.max(locY - __radius, 0);
-                bounce(false);
-            } else if ((locY + __radius >= dimY || locY - __radius < 0) && velY < velCutOff) {
+                bounce("vertical");
+            } else if ((locY + __radius >= dimY || locY - __radius < 0) && Math.abs(velY) < velCutOff) {
                 __setVelY(0.0);
                 this.__isLanded = true;
             }
+        } else if (this.__isBouncy && this.__isLanded) {
+            int locX = (int) this.__loc.x();
+            int velX = (int) this.__vel.x();
+            double velDotX = this.__vel.dot(new Vec(0, -1));
+
+            if (locX + __radius >= dimX && velDotX < 0 && Math.abs(velX) >= velCutOff) {
+                locX = Math.min(locX + __radius, dimX);
+                bounce("horizontal");
+            } else if (locX - __radius <= 0 && velDotX < 0 && Math.abs(velX) >= velCutOff) {
+                locX = Math.max(locX - __radius, 0);
+                bounce("horizontal");
+            } else if ((locX + __radius >= dimX || locX - __radius <= 0) && Math.abs(velDotX) < velCutOff) {
+                __setLoc(locX, (int) this.__loc.y());
+                __setVelX(0.0);
+                this.__isSliding = true;
+            }
         }
+
+        if (this.__vel.mag() > velCutOff) {
+            this.__isLanded = false;
+            this.__isSliding = false;
+        }
+    }
+
+    public void bounce(String mode) {
+        this.__vel = this.__vel.reflect2D(mode == "horizontal" ? 1 : 0).scale(this.__bounceFactor);
     }
 
     @Override
@@ -128,7 +154,7 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
         if (!__isVisible)
             return;
         g2d.setColor(__color);
-        g2d.fillOval(((int) this.__loc.x() - this.__radius),
+        g2d.drawOval(((int) this.__loc.x() - this.__radius),
                 ((int) this.__loc.y() - this.__radius),
                 this.__radius * 2,
                 this.__radius * 2);
@@ -138,14 +164,6 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     public void applyForce(Vec force) {
         Vec f = force.scale(1 / __mass);
         this.__acc = this.__acc.plus(f);
-    }
-
-    public void bounce(boolean isHorizontal) {
-        this.__vel = this.__vel.reflect2D(isHorizontal ? 1 : 0).scale(this.__bounceFactor);
-    }
-
-    public int get__radius() {
-        return this.__radius;
     }
 
     @Override
@@ -193,19 +211,46 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
         this.__isVisible = visible;
     }
 
+    @Override
     public boolean isBouncy() {
         return this.__isBouncy;
     }
 
+    @Override
+    public boolean isLanded() {
+        return this.__isLanded;
+    }
+
+    @Override
+    public boolean isSliding() {
+        return this.__isSliding;
+    }
+
+    @Override
     public void setBouncy(boolean bouncy) {
         this.__isBouncy = bouncy;
     }
 
+    @Override
     public void setBounceFactor(double factor) {
         this.__bounceFactor = factor;
     }
 
-    private void __setLoc(double locX, double locY) {
+    public int getRadius() {
+        return this.__radius;
+    }
+
+    @Override
+    public double getFrictionCoefficient() {
+        return this.__frictionCoefficient;
+    }
+
+    @Override
+    public void setFrictionCoefficient(double coefficient) {
+        this.__frictionCoefficient = coefficient;
+    }
+
+    protected void __setLoc(double locX, double locY) {
         this.__loc = new Vec(locX, locY);
     }
 

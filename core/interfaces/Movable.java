@@ -14,4 +14,18 @@ public interface Movable {
     double getMass();
 
     void setMass(double m);
+
+    boolean isBouncy();
+
+    void setBouncy(boolean bouncy);
+
+    void setBounceFactor(double factor);
+
+    boolean isLanded();
+
+    boolean isSliding();
+
+    double getFrictionCoefficient();
+
+    void setFrictionCoefficient(double coefficient);
 }
