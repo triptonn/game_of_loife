@@ -11,6 +11,10 @@ public interface Moveable {
 
     Vec getAcceleration();
 
+    double getAngle();
+
+    void setAngle(double angle);
+
     double getMass();
 
     void setMass(double m);

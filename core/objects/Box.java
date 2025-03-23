@@ -43,12 +43,12 @@ public class Box extends SceneObject implements Inert, Renderable {
 
     @Override
     public Vec getLocation() {
-        return this.__loc;
+        return this.loc;
     }
 
     @Override
     public void setLocation(Vec loc) {
-        this.__loc = loc;
+        this.loc = loc;
     }
 
     @Override

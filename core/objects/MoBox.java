@@ -19,6 +19,8 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     private Vec __vel;
     private Vec __acc;
 
+    private double __angle;
+
     private Color __color;
     private boolean __isVisible = false;
 
@@ -61,8 +63,10 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
         int dimY = (int) this.getSceneDim().height;
         this.__vel = this.__vel.plus(__acc);
         this.__loc = this.__loc.plus(__vel);
-        __setLoc(Math.max(Math.min(this.__loc.x(), dimX - this.__width), 0 + this.__width),
-                Math.max(Math.min(this.__loc.y(), dimY - this.__height), 0 + this.__height));
+        __setLoc(Math.max(Math.min(this.__loc.x(), dimX - this.__width),
+                0 + this.__width),
+                Math.max(Math.min(this.__loc.y(), dimY - this.__height),
+                        0 + this.__height));
         this.__acc = this.__acc.scale(0);
 
         if (this.__isBouncy && !this.__isLanded) {
@@ -130,6 +134,7 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     public void render(Graphics2D g2d) {
         if (this.__isVisible) {
             g2d.setColor(this.__color);
+            g2d.rotate(this.__angle, this.__loc.x() + (this.__width / 2), this.__loc.y() + (this.__height / 2));
             g2d.fillRect(
                     (int) this.__loc.x(),
                     (int) this.__loc.y(),
@@ -157,6 +162,16 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     @Override
     public Vec getAcceleration() {
         return this.__acc;
+    }
+
+    @Override
+    public double getAngle() {
+        return this.__angle;
+    }
+
+    @Override
+    public void setAngle(double angle) {
+        this.__angle = angle;
     }
 
     @Override

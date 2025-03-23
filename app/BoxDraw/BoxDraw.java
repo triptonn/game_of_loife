@@ -3,8 +3,10 @@ package BoxDraw;
 import javax.swing.Timer;
 
 import data.Vec;
+import interfaces.Moveable;
 import objects.Box;
 import objects.MoBox;
+import objects.SceneObject;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -75,7 +77,12 @@ public class BoxDraw {
     };
 
     private void update() {
-        // Game logic
+        for (SceneObject obj : model.getObjects()) {
+            if (obj instanceof Moveable) {
+                Moveable m = (Moveable) obj;
+                m.setAngle(m.getAngle() + 1);
+            }
+        }
     };
 
     private void setupScene() {
