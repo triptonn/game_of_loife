@@ -195,7 +195,7 @@ public class MassiveBalls {
         }
 
         SimpleLiquid liquidBody = new SimpleLiquid("water", (int) (this.dim.getWidth() / 2),
-                (int) (this.dim.getHeight() / 2), 32,
+                (int) (this.dim.getHeight() / 2), 16,
                 new Vec(0, 360), this.dim,
                 ColorScheme.WATER_COLOR);
 

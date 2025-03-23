@@ -1,7 +1,8 @@
 package massive_balls;
 
 import objects.SceneObject;
-
+import objects.SimpleLiquid;
+import interfaces.Inert;
 import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
@@ -64,10 +65,36 @@ public class SceneModel {
     }
 
     public void render(Graphics2D g2d) {
+        ArrayList<Renderable> background = new ArrayList<>();
+        ArrayList<Renderable> liquidBodies = new ArrayList<>();
+        ArrayList<Renderable> actors = new ArrayList<>();
+
         for (Renderable r : renderers) {
             if (r.isVisible()) {
-                r.render(g2d);
+                if (r instanceof Moveable) {
+                    actors.add(r);
+                }
+
+                if (r instanceof SimpleLiquid) {
+                    liquidBodies.add(r);
+                }
+
+                if (r instanceof Inert) {
+                    background.add(r);
+                }
             }
+        }
+
+        for (Renderable b : background) {
+            b.render(g2d);
+        }
+
+        for (Renderable a : actors) {
+            a.render(g2d);
+        }
+
+        for (Renderable l : liquidBodies) {
+            l.render(g2d);
         }
     }
 
