@@ -8,8 +8,9 @@ import data.Vec;
 import interfaces.Inert;
 import interfaces.Moveable;
 import interfaces.Renderable;
+import interfaces.Updateable;
 
-public class SimpleLiquid extends SceneObject implements Inert, Renderable {
+public class SimpleLiquid extends SceneObject implements Inert, Renderable, Updateable {
     private Vec __loc;
     private double viscosity;
     private boolean __isVisible = false;
@@ -48,6 +49,11 @@ public class SimpleLiquid extends SceneObject implements Inert, Renderable {
     public void drag(Moveable mover) {
         double speed = mover.getVelocity().mag();
         mover.applyForce(mover.getVelocity().norm().scale(-1 * this.viscosity * speed * speed));
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override

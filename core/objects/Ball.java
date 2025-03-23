@@ -155,7 +155,7 @@ public class Ball extends SceneObject implements Moveable, Renderable, Updateabl
 
     @Override
     public void render(Graphics2D g2d) {
-        if (!__isVisible)
+        if (!this.__isVisible)
             return;
         g2d.setColor(__color);
         g2d.fillOval(((int) this.__loc.x() - this.__radius),

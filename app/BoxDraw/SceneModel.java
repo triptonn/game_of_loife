@@ -1,4 +1,4 @@
-package templates;
+package BoxDraw;
 
 import interfaces.Inert;
 import interfaces.Moveable;
