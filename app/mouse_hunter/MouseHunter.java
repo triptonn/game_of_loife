@@ -100,8 +100,10 @@ public class MouseHunter {
         Ball ball = new Ball("ball", 15, 5.0, ballPos, new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT), Color.orange);
         ball.setBouncy(true);
         ball.setVisible(true);
-        VectorArrow ballAcc = new VectorArrow("Acc", ballVellSelf, ballPos, 10, new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT), Color.red);
-        VectorArrow ballVel = new VectorArrow("Vel", ballVellSelf, ballPos, 10, new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT), Color.yellow);
+        VectorArrow ballAcc = new VectorArrow("Acc", ballVellSelf, ballPos, 10,
+                new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT), Color.red);
+        VectorArrow ballVel = new VectorArrow("Vel", ballVellSelf, ballPos, 10,
+                new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT), Color.yellow);
         ballAcc.setVisible(true);
         ballVel.setVisible(true);
         model.addObject(ball);

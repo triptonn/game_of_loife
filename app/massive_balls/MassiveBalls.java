@@ -3,8 +3,11 @@ package massive_balls;
 import javax.swing.Timer;
 
 import data.Vec;
-import interfaces.Movable;
+import ui.ColorScheme;
+import interfaces.Moveable;
 import objects.Ball;
+import objects.SceneObject;
+import objects.SimpleLiquid;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,7 +39,7 @@ public class MassiveBalls {
         frame = new JFrame("MassiveBalls");
 
         panel.setPreferredSize(dim);
-        panel.setBackground(Color.black);
+        panel.setBackground(Color.darkGray);
 
         panel.addMouseListener(new MouseAdapter() {
             @Override
@@ -98,7 +101,8 @@ public class MassiveBalls {
 
     public void startLoop() {
         if (sceneTimer == null) {
-            sceneTimer = new Timer(16, e -> {
+            sceneTimer = new Timer(64, e -> {
+                // sceneTimer = new Timer(16, e -> {
                 update();
                 panel.repaint();
             });
@@ -116,10 +120,11 @@ public class MassiveBalls {
 
     private void update() {
         Vec gravity = new Vec(0.0, 0.3);
+        Vec drag = new Vec(0.0, 0.0);
         Vec wind_right = new Vec(-10.0, 0.0);
         Vec wind_left = new Vec(10.0, 0.0);
 
-        for (Movable m : model.getMovers()) {
+        for (Moveable m : model.getMovers()) {
             m.applyForce(gravity.scale(m.getMass()));
             if (windyRight) {
                 m.applyForce(wind_right);
@@ -129,19 +134,34 @@ public class MassiveBalls {
                 m.applyForce(wind_left);
             }
 
-            if (m.isLanded()) {
+            if (m.isLanded() && m.getHasFriction()) {
                 Vec friction = new Vec(m.getVelocity().norm().scale(m.getFrictionCoefficient()));
                 m.applyForce(friction);
             }
+
+            if (m.getHasDrag()) {
+                double speed = m.getVelocity().mag();
+                drag = m.getVelocity().norm().scale(m.getDragCoefficient() * speed * speed);
+                m.applyForce(drag);
+            }
+
+            for (SceneObject obj : model.getObjects()) {
+                if (obj instanceof SimpleLiquid && m.getVelocity().mag() > 0) {
+                    SimpleLiquid liquidBody = (SimpleLiquid) obj;
+                    if (liquidBody.contains(m)) {
+                        liquidBody.drag(m);
+                    }
+                }
+            }
+            model.update();
         }
-        model.update();
     };
 
     private void setupScene() {
         Random r = new Random(725630);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             int x = (int) (r.nextGaussian() * 360) + 640;
-            int y = (int) (r.nextGaussian() * 240) + 260;
+            int y = (int) (r.nextGaussian() * 120) + 260;
 
             int radius;
             double mass;
@@ -151,11 +171,22 @@ public class MassiveBalls {
             System.out.println("Vec(" + x + ", " + y + "), r = " + radius);
 
             Vec spawn = new Vec(x, y);
-            Ball b = new Ball("ball" + i, radius, mass, spawn, dim, Color.orange);
+            Ball b = new Ball("ball" + i, radius, mass, spawn, dim, Color.green);
             b.setBouncy(true);
+            b.setFrictionCoefficient(0.05);
+            b.setDragCoefficient(0.01);
             b.setVisible(true);
             model.addObject(b);
         }
+
+        SimpleLiquid liquidBody = new SimpleLiquid("water", (int) (this.dim.getWidth() / 2),
+                (int) (this.dim.getHeight() / 2), 32,
+                new Vec(0, 360), this.dim,
+                ColorScheme.WATER_COLOR);
+
+        liquidBody.setVisible(true);
+        model.addObject(liquidBody);
+
         model.setShowComponents(true);
     }
 

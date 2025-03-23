@@ -1,7 +1,7 @@
 package mouse_hunter;
 
 import interfaces.Inert;
-import interfaces.Movable;
+import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
 import objects.Ball;
@@ -17,7 +17,7 @@ public class SceneModel {
     private boolean isShowComponents = false;
     private ArrayList<SceneObject> objects;
     private ArrayList<Inert> inerts;
-    private ArrayList<Movable> movers;
+    private ArrayList<Moveable> movers;
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
 
@@ -47,8 +47,8 @@ public class SceneModel {
             inerts.add((Inert) obj);
         }
 
-        if (obj instanceof Movable) {
-            movers.add((Movable) obj);
+        if (obj instanceof Moveable) {
+            movers.add((Moveable) obj);
         }
 
         if (obj instanceof Renderable) {
@@ -65,7 +65,7 @@ public class SceneModel {
             // game logic for all objects
         }
 
-        for (Movable mover : movers) {
+        for (Moveable mover : movers) {
             if (mover instanceof SceneObject) {
                 Vec direction = model.getMousePos().minus(mover.getLocation());
 
@@ -78,10 +78,10 @@ public class SceneModel {
 
                         if (locX > MouseHunter.WINDOW_WIDTH
                                 || locX < 0) {
-                            ball.bounce(true);
+                            ball.bounce("horizontal");
                         } else if (locY > MouseHunter.WINDOW_HEIGHT
                                 || locY < 0) {
-                            ball.bounce(false);
+                            ball.bounce("vertical");
                         }
                     }
                 }

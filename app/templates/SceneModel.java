@@ -1,6 +1,6 @@
 package templates;
 
-import interfaces.Movable;
+import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
 import objects.SceneObject;
@@ -15,18 +15,18 @@ public class SceneModel {
     private boolean isShowComponents = false;
 
     private ArrayList<SceneObject> objects;
-    private ArrayList<Movable> movers;
+    private ArrayList<Moveable> movers;
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
-    
+
     private Dimension dim;
     private Vec origin;
 
     private Vec mousePos = origin;
 
     public SceneModel(Dimension scene) {
-    	this.dim = scene;
-    	this.origin = new Vec(this.dim.width / 2, this.dim.height / 2);
+        this.dim = scene;
+        this.origin = new Vec(this.dim.width / 2, this.dim.height / 2);
 
         objects = new ArrayList<>();
         movers = new ArrayList<>();
@@ -36,8 +36,8 @@ public class SceneModel {
 
     public void addObject(SceneObject obj) {
         objects.add(obj);
-        if (obj instanceof Movable) {
-            movers.add((Movable) obj);
+        if (obj instanceof Moveable) {
+            movers.add((Moveable) obj);
         }
 
         if (obj instanceof Updateable) {
@@ -50,7 +50,7 @@ public class SceneModel {
     }
 
     public void update() {
-        for (Movable mover : movers) {
+        for (Moveable mover : movers) {
             Vec force = new Vec(0.0, 0.02);
             mover.applyForce(force);
         }
@@ -83,9 +83,9 @@ public class SceneModel {
     public boolean isShowComponents() {
         return isShowComponents;
     }
-    
+
     public Dimension getDimensions() {
-    	return this.dim;
+        return this.dim;
     }
 
     public Vec getOrigin() {

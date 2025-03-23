@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import data.Vec;
-import interfaces.Movable;
+import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
 
@@ -25,7 +25,7 @@ import interfaces.Updateable;
  *
  *
  */
-public class Ball extends SceneObject implements Movable, Renderable, Updateable {
+public class Ball extends SceneObject implements Moveable, Renderable, Updateable {
     private int __radius;
     private double __mass;
 
@@ -39,6 +39,10 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     private boolean __hasFriction = false;
     private double __frictionCoefficient = 0.80;
 
+    // TODO: Remove drag from here and used the SimpleLiquid class to implement drag
+    private boolean __hasDrag = false;
+    private double __dragCoefficient = 0.0;
+
     private boolean __isLanded = false;
     private boolean __isSliding = false;
     private boolean __isBouncy = false;
@@ -47,17 +51,17 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     /**
      * <h1>Constructor of the Ball object</h1>
      *
-     * @param name   Type: String --> Name as identifier
-     * @param radius Type: int --> Radius in pixel
-     * @param mass   Type: double --> Mass of the ball
-     * @param loc    Type: Vec --> Location (drawing origin, not the center)
-     * @param dim    Type: Dimension --> Scene dimension
-     * @param color  Type: Color --> Color of the ball object
+     * @param name     Type: String --> Name as identifier
+     * @param radius   Type: int --> Radius in pixel
+     * @param mass     Type: double --> Mass of the ball
+     * @param loc      Type: Vec --> Location (drawing origin, not the center)
+     * @param sceneDim Type: Dimension --> Scene dimension
+     * @param color    Type: Color --> Color of the ball object
      *
      *
      */
-    public Ball(String name, int radius, double mass, Vec loc, Dimension dim, Color color) {
-        super(name, loc, dim);
+    public Ball(String name, int radius, double mass, Vec loc, Dimension sceneDim, Color color) {
+        super(name, loc, new Dimension(radius, radius), sceneDim);
 
         this.name = name;
         this.__radius = radius;
@@ -80,8 +84,8 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     public void update() {
         double velCutOff = 0.1;
 
-        int dimX = (int) this.getDim().width;
-        int dimY = (int) this.getDim().height;
+        int dimX = (int) this.getSceneDim().width;
+        int dimY = (int) this.getSceneDim().height;
         this.__vel = this.__vel.plus(__acc);
         this.__loc = this.__loc.plus(__vel);
         __setLoc(Math.max(Math.min(this.__loc.x(), dimX - this.__radius), 0 + this.__radius),
@@ -154,7 +158,7 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
         if (!__isVisible)
             return;
         g2d.setColor(__color);
-        g2d.drawOval(((int) this.__loc.x() - this.__radius),
+        g2d.fillOval(((int) this.__loc.x() - this.__radius),
                 ((int) this.__loc.y() - this.__radius),
                 this.__radius * 2,
                 this.__radius * 2);
@@ -241,6 +245,16 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     }
 
     @Override
+    public boolean getHasFriction() {
+        return this.__hasFriction;
+    }
+
+    @Override
+    public void setHasFriction(boolean hasFriction) {
+        this.__hasFriction = hasFriction;
+    }
+
+    @Override
     public double getFrictionCoefficient() {
         return this.__frictionCoefficient;
     }
@@ -248,6 +262,26 @@ public class Ball extends SceneObject implements Movable, Renderable, Updateable
     @Override
     public void setFrictionCoefficient(double coefficient) {
         this.__frictionCoefficient = coefficient;
+    }
+
+    @Override
+    public boolean getHasDrag() {
+        return this.__hasDrag;
+    }
+
+    @Override
+    public void setHasDrag(boolean hasDrag) {
+        this.__hasDrag = hasDrag;
+    }
+
+    @Override
+    public double getDragCoefficient() {
+        return this.__dragCoefficient;
+    }
+
+    @Override
+    public void setDragCoefficient(double coefficient) {
+        this.__dragCoefficient = coefficient;
     }
 
     protected void __setLoc(double locX, double locY) {

@@ -1,6 +1,6 @@
 package vector_shizzle;
 
-import interfaces.Movable;
+import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
 import objects.SceneObject;
@@ -14,7 +14,7 @@ public class SceneModel {
     private boolean isShowComponents = false;
 
     private ArrayList<SceneObject> objects;
-    private ArrayList<Movable> movers;
+    private ArrayList<Moveable> movers;
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
 
@@ -33,8 +33,8 @@ public class SceneModel {
 
     public void addObject(SceneObject obj) {
         objects.add(obj);
-        if (obj instanceof Movable) {
-            movers.add((Movable) obj);
+        if (obj instanceof Moveable) {
+            movers.add((Moveable) obj);
         }
 
         if (obj instanceof Renderable) {
@@ -47,7 +47,7 @@ public class SceneModel {
     }
 
     public void update() {
-        for (Movable mover : movers) {
+        for (Moveable mover : movers) {
             Vec force = new Vec(0.0, 0.02);
             mover.applyForce(force);
         }

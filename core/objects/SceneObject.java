@@ -7,12 +7,14 @@ import data.Vec;
 public class SceneObject {
     public String name;
     protected Vec loc;
-    protected Dimension scene;
+    protected Dimension objectDim;
+    protected Dimension sceneDim;
 
-    public SceneObject(String name, Vec loc, Dimension scene) {
+    public SceneObject(String name, Vec loc, Dimension object, Dimension scene) {
         this.name = name;
         this.loc = loc;
-        this.scene = scene;
+        this.objectDim = object;
+        this.sceneDim = scene;
     }
 
     public String getName() {
@@ -23,12 +25,15 @@ public class SceneObject {
         this.name = name;
     };
 
-    public Dimension getDim() {
-        return this.scene;
+    public Dimension getObjectDim() {
+        return this.objectDim;
+    }
+
+    public Dimension getSceneDim() {
+        return this.sceneDim;
     };
 
-    public void setDim(Dimension scene) {
-        this.scene = scene;
+    public void setSceneDim(Dimension scene) {
+        this.sceneDim = scene;
     };
-
 }

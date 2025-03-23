@@ -1,6 +1,9 @@
 package game_of_loife;
 
 import javax.swing.*;
+
+import ui.ColorScheme;
+
 import java.awt.*;
 import java.awt.event.*;
 
