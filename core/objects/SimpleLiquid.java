@@ -12,6 +12,7 @@ import interfaces.Updateable;
 
 public class SimpleLiquid extends SceneObject implements Inert, Renderable, Updateable {
     private Vec __loc;
+    private double __angle;
     private double viscosity;
     private boolean __isVisible = false;
     private Color __color;
@@ -84,6 +85,16 @@ public class SimpleLiquid extends SceneObject implements Inert, Renderable, Upda
     @Override
     public void setLocation(Vec loc) {
         this.__loc = loc;
+    }
+
+    @Override
+    public double getAngle() {
+        return this.__angle;
+    }
+
+    @Override
+    public void setAngle(double angle) {
+        this.__angle = angle;
     }
 
     @Override

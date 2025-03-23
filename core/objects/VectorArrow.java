@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Dimension;
 
 import data.Vec;
-import interfaces.Inert;
+import interfaces.Informative;
 import interfaces.Renderable;
 import interfaces.Updateable;
 
-public class VectorArrow extends SceneObject implements Inert, Renderable, Updateable {
+public class VectorArrow extends SceneObject implements Informative, Renderable, Updateable {
     private Vec self;
 
     private Color color;
@@ -18,7 +18,7 @@ public class VectorArrow extends SceneObject implements Inert, Renderable, Updat
     private int ARROW_SIZE;
 
     public VectorArrow(String name, Vec self, Vec loc, int arrowSize, Dimension dim, Color color) {
-        super(name, loc, dim);
+        super(name, loc, new Dimension((int) self.x(), (int) self.y()), dim);
         this.self = self;
         this.ARROW_SIZE = arrowSize;
         this.color = color;
