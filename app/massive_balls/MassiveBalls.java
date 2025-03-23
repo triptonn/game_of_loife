@@ -27,11 +27,14 @@ public class MassiveBalls {
     private final JFrame frame;
 
     public Dimension dim = new Dimension(1280, 720);
+    private double airBounceFactor = 0.8;
+    private double waterBounceFactor = 0.2;
 
     private static double[] draggedPos = new double[2];
 
     private boolean windyLeft = false;
     private boolean windyRight = false;
+    private static boolean isRunning = true;
 
     public MassiveBalls() {
         model = new SceneModel(dim);
@@ -86,8 +89,13 @@ public class MassiveBalls {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    model.toggleShowComponents();
-                    panel.repaint();
+                    if (!isRunning) {
+                        startLoop();
+                        setRunning(true);
+                    } else {
+                        stopLoop();
+                        setRunning(false);
+                    }
                 }
             }
         });
@@ -101,12 +109,16 @@ public class MassiveBalls {
 
     public void startLoop() {
         if (sceneTimer == null) {
-            sceneTimer = new Timer(64, e -> {
-                // sceneTimer = new Timer(16, e -> {
+            sceneTimer = new Timer(16, e -> {
                 update();
                 panel.repaint();
             });
         }
+
+        if (!isRunning) {
+            setRunning(true);
+        }
+
         sceneTimer.start();
 
         frame.setVisible(true);
@@ -114,6 +126,9 @@ public class MassiveBalls {
 
     public void stopLoop() {
         if (sceneTimer != null) {
+            if (isRunning) {
+                setRunning(false);
+            }
             sceneTimer.stop();
         }
     };
@@ -149,7 +164,10 @@ public class MassiveBalls {
                 if (obj instanceof SimpleLiquid && m.getVelocity().mag() > 0) {
                     SimpleLiquid liquidBody = (SimpleLiquid) obj;
                     if (liquidBody.contains(m)) {
+                        m.setBounceFactor(this.waterBounceFactor);
                         liquidBody.drag(m);
+                    } else {
+                        m.setBounceFactor(this.airBounceFactor);
                     }
                 }
             }
@@ -167,9 +185,6 @@ public class MassiveBalls {
             double mass;
             radius = (r.nextInt(10) + 2) * 2;
             mass = radius * 3;
-
-            System.out.println("Vec(" + x + ", " + y + "), r = " + radius);
-
             Vec spawn = new Vec(x, y);
             Ball b = new Ball("ball" + i, radius, mass, spawn, dim, Color.green);
             b.setBouncy(true);
@@ -194,5 +209,9 @@ public class MassiveBalls {
         MassiveBalls mb = new MassiveBalls();
         mb.setupScene();
         mb.startLoop();
+    }
+
+    public static void setRunning(boolean running) {
+        isRunning = running;
     }
 }

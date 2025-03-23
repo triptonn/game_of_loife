@@ -71,20 +71,12 @@ public class SceneModel {
         }
     }
 
-    public void setShowComponents(boolean state) {
-        this.isShowComponents = state;
-    }
-
     public ArrayList<SceneObject> getObjects() {
         return objects;
     }
 
     public ArrayList<Moveable> getMovers() {
         return movers;
-    }
-
-    public boolean isShowComponents() {
-        return isShowComponents;
     }
 
     public Dimension getDimensions() {
@@ -101,6 +93,14 @@ public class SceneModel {
 
     public void setMousePos(Vec pos) {
         this.mousePos = pos;
+    }
+
+    public boolean isShowComponents() {
+        return isShowComponents;
+    }
+
+    public void setShowComponents(boolean state) {
+        this.isShowComponents = state;
     }
 
     public void toggleShowComponents() {

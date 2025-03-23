@@ -82,7 +82,7 @@ public class Ball extends SceneObject implements Moveable, Renderable, Updateabl
 
     @Override
     public void update() {
-        double velCutOff = 0.1;
+        double velCutOff = 0.05;
 
         int dimX = (int) this.getSceneDim().width;
         int dimY = (int) this.getSceneDim().height;
