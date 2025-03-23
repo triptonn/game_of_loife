@@ -41,12 +41,12 @@ public class VectorArrow extends SceneObject implements Inert, Renderable, Updat
         g2d.setColor(color);
         g2d.setStroke(new BasicStroke(2));
 
-        Vec end = loc.plus(this.self);
+        Vec end = __loc.plus(this.self);
 
-        g2d.drawLine((int) this.loc.x(), (int) this.loc.y(),
+        g2d.drawLine((int) this.__loc.x(), (int) this.__loc.y(),
                 (int) end.x(), (int) end.y());
 
-        Vec direction = end.minus(this.loc);
+        Vec direction = end.minus(this.__loc);
         Vec normalized = direction.norm();
 
         Vec perp = new Vec(-normalized.y(), normalized.x());
@@ -63,11 +63,11 @@ public class VectorArrow extends SceneObject implements Inert, Renderable, Updat
     }
 
     public Vec getLocation() {
-        return this.loc;
+        return this.__loc;
     }
 
     public void setLocation(Vec loc) {
-        this.loc = loc;
+        this.__loc = loc;
     }
 
     public Color getColor() {

@@ -12,6 +12,8 @@ public class Box extends SceneObject implements Inert, Renderable {
     private int __width;
     private int __height;
 
+    private double __angle;
+
     private boolean __isVisible = false;
     private Color __color;
 
@@ -33,9 +35,10 @@ public class Box extends SceneObject implements Inert, Renderable {
     public void render(Graphics2D g2d) {
         if (this.__isVisible) {
             g2d.setColor(this.__color);
+            g2d.rotate(this.__angle, this.__loc.x() + (this.__width / 2), this.__loc.y() + (this.__height / 2));
             g2d.fillRect(
-                    (int) this.loc.x(),
-                    (int) this.loc.y(),
+                    (int) this.__loc.x(),
+                    (int) this.__loc.y(),
                     this.__width,
                     this.__height);
         }
@@ -43,12 +46,22 @@ public class Box extends SceneObject implements Inert, Renderable {
 
     @Override
     public Vec getLocation() {
-        return this.loc;
+        return this.__loc;
     }
 
     @Override
     public void setLocation(Vec loc) {
-        this.loc = loc;
+        this.__loc = loc;
+    }
+
+    @Override
+    public double getAngle() {
+        return this.__angle;
+    }
+
+    @Override
+    public void setAngle(double angle) {
+        this.__angle = angle;
     }
 
     @Override

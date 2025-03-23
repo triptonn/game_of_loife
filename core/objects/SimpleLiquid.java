@@ -31,10 +31,11 @@ public class SimpleLiquid extends SceneObject implements Inert, Renderable, Upda
         Vec moverLoc = mover.getLocation();
         Dimension moverDim = obj.getObjectDim();
 
-        boolean moverLeftRightOfBodyLeft = moverLoc.x() >= this.loc.x();
-        boolean moverRightLeftOfBodyRight = moverLoc.x() + moverDim.width <= this.loc.x() + this.objectDim.getWidth();
-        boolean moverTopUnderBodyTop = moverLoc.y() >= this.loc.y();
-        boolean moverBottomOverBodyBottom = moverLoc.y() + moverDim.height <= this.loc.y() + this.objectDim.getHeight();
+        boolean moverLeftRightOfBodyLeft = moverLoc.x() >= this.__loc.x();
+        boolean moverRightLeftOfBodyRight = moverLoc.x() + moverDim.width <= this.__loc.x() + this.objectDim.getWidth();
+        boolean moverTopUnderBodyTop = moverLoc.y() >= this.__loc.y();
+        boolean moverBottomOverBodyBottom = moverLoc.y() + moverDim.height <= this.__loc.y()
+                + this.objectDim.getHeight();
 
         if (moverLeftRightOfBodyLeft
                 && moverRightLeftOfBodyRight
@@ -61,7 +62,8 @@ public class SimpleLiquid extends SceneObject implements Inert, Renderable, Upda
         if (!__isVisible)
             return;
         g2d.setColor(this.__color);
-        g2d.fillRect((int) this.loc.x(), (int) this.loc.y(), (int) this.objectDim.width, (int) this.objectDim.height);
+        g2d.fillRect((int) this.__loc.x(), (int) this.__loc.y(), (int) this.objectDim.width,
+                (int) this.objectDim.height);
     }
 
     @Override

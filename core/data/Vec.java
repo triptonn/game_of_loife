@@ -21,6 +21,14 @@ public class Vec {
         this.data[1] = y;
     }
 
+    public Vec(double x, double y, double z) {
+        this.n = 3;
+        this.data = new double[n];
+        this.data[0] = x;
+        this.data[1] = y;
+        this.data[2] = z;
+    }
+
     public Vec(Vec original) {
         this.n = original.length();
 
@@ -60,6 +68,19 @@ public class Vec {
             sum = sum + (this.data[i] * that.data[i]);
         }
         return sum;
+    }
+
+    public Vec cross3(Vec a, Vec b) {
+        if (a.length() == 3 && b.length() == 3) {
+            Vec axb = new Vec(3);
+            axb.data[0] = a.data[1] * b.data[2] - a.data[2] * b.data[1];
+            axb.data[1] = a.data[2] * b.data[0] - a.data[0] * b.data[2];
+            axb.data[2] = a.data[0] * b.data[1] - a.data[1] * b.data[0];
+
+            return axb;
+        } else {
+            throw new IllegalArgumentException("Vec must be Vec3");
+        }
     }
 
     public double mag() {

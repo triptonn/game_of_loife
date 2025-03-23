@@ -3,3 +3,4 @@ saves
 bin
 *.jar
 .intro_prompt
+.VSCodeCounter

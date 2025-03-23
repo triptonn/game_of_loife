@@ -80,7 +80,8 @@ public class BoxDraw {
         for (SceneObject obj : model.getObjects()) {
             if (obj instanceof Moveable) {
                 Moveable m = (Moveable) obj;
-                m.setAngle(m.getAngle() + 1);
+                Vec momentum = new Vec(0.0, 0.0, 2.0);
+                m.applyMomentum(momentum);
             }
         }
     };

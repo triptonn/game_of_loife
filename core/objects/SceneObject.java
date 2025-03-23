@@ -6,13 +6,13 @@ import data.Vec;
 
 public class SceneObject {
     public String name;
-    protected Vec loc;
+    protected Vec __loc;
     protected Dimension objectDim;
     protected Dimension sceneDim;
 
     public SceneObject(String name, Vec loc, Dimension object, Dimension scene) {
         this.name = name;
-        this.loc = loc;
+        this.__loc = loc;
         this.objectDim = object;
         this.sceneDim = scene;
     }

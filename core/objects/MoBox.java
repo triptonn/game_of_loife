@@ -14,12 +14,15 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     private int __height;
 
     private double __mass;
+    private double __inertia;
 
     private Vec __loc;
     private Vec __vel;
     private Vec __acc;
 
     private double __angle;
+    private Vec __angularVel;
+    private Vec __angularAcc;
 
     private Color __color;
     private boolean __isVisible = false;
@@ -61,14 +64,25 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
 
         int dimX = (int) this.getSceneDim().width;
         int dimY = (int) this.getSceneDim().height;
+
+        // Translation
         this.__vel = this.__vel.plus(__acc);
         this.__loc = this.__loc.plus(__vel);
+
         __setLoc(Math.max(Math.min(this.__loc.x(), dimX - this.__width),
                 0 + this.__width),
                 Math.max(Math.min(this.__loc.y(), dimY - this.__height),
                         0 + this.__height));
+
         this.__acc = this.__acc.scale(0);
 
+        // Rotation
+        this.__angularVel = this.__angularVel.plus(__angularAcc);
+        this.__angle = this.__angle + this.__angularVel.mag();
+
+        this.__angularAcc = this.__angularAcc.scale(0);
+
+        // Bounce
         if (this.__isBouncy && !this.__isLanded) {
 
             int locX = (int) this.__loc.x();
@@ -150,6 +164,13 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     }
 
     @Override
+    public void applyMomentum(Vec momentum) {
+        this.__inertia = this.__mass * ((this.__width + this.__height) / 2);
+        Vec m = momentum.scale(1 / this.__inertia);
+        this.__angularAcc = this.__acc.plus(m);
+    }
+
+    @Override
     public Vec getLocation() {
         return this.__loc;
     }
@@ -170,8 +191,13 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     }
 
     @Override
-    public void setAngle(double angle) {
-        this.__angle = angle;
+    public Vec getAngularVelocity() {
+        return this.__angularVel;
+    }
+
+    @Override
+    public Vec getAngularAcceleration() {
+        return this.__angularAcc;
     }
 
     @Override
