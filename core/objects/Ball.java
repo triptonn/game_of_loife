@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 
 import data.Vec;
+import interfaces.Attractor;
 import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
@@ -25,13 +26,62 @@ import interfaces.Updateable;
  *
  *
  */
-public class Ball extends SceneObject implements Moveable, Renderable, Updateable {
+public class Ball extends SceneObject implements Moveable, Attractor, Renderable, Updateable {
+
+    @Override
+    public double getAngle() {
+        return this.__angle;
+    }
+
+    @Override
+    public Vec getAngularVelocity() {
+        return this.__angularVel;
+    }
+
+    @Override
+    public void setAngularVelocity(Vec angularVel) {
+        this.__angularVel = angularVel;
+    }
+
+    @Override
+    public Vec getAngularAcceleration() {
+        return this.__angularAcc;
+    }
+
+    @Override
+    public void applyMomentum(Vec momentum) {
+        this.__inertia = this.__mass * __radius * __radius;
+        Vec m = momentum.scale(1 / this.__inertia);
+        this.__angularAcc = this.__acc.plus(m);
+    }
+
+    @Override
+    public Vec attract(Moveable m) {
+        Vec distanceVec = this.__loc.minus(m.getLocation());
+
+        if (distanceVec.mag() == 0)
+            return new Vec(0.0, 0.0);
+
+        Vec direction = distanceVec.norm();
+        double distance = distanceVec.mag();
+        distance = Math.min(Math.max(distance, 5), 25);
+
+        double magnitude = (__mass * m.getMass()) / (distance * distance);
+        Vec force = direction.scale(magnitude);
+        return force;
+    }
+
     private int __radius;
     private double __mass;
+    private double __inertia;
 
     private Vec __loc;
     private Vec __vel;
     private Vec __acc;
+
+    private double __angle;
+    private Vec __angularVel;
+    private Vec __angularAcc;
 
     private Color __color;
     private boolean __isVisible = false;
@@ -42,6 +92,8 @@ public class Ball extends SceneObject implements Moveable, Renderable, Updateabl
     // TODO: Remove drag from here and used the SimpleLiquid class to implement drag
     private boolean __hasDrag = false;
     private double __dragCoefficient = 0.0;
+
+    private boolean __isAttractor = false;
 
     private boolean __isLanded = false;
     private boolean __isSliding = false;
@@ -86,11 +138,27 @@ public class Ball extends SceneObject implements Moveable, Renderable, Updateabl
 
         int dimX = (int) this.getSceneDim().width;
         int dimY = (int) this.getSceneDim().height;
+
+        // Translation
         this.__vel = this.__vel.plus(__acc);
         this.__loc = this.__loc.plus(__vel);
-        __setLoc(Math.max(Math.min(this.__loc.x(), dimX - this.__radius), 0 + this.__radius),
-                Math.max(Math.min(this.__loc.y(), dimY - this.__radius), 0 + this.__radius));
+        __setLoc(
+                Math.max(Math.min(this.__loc.x(), dimX - this.__radius),
+                        0 + this.__radius),
+                Math.max(Math.min(this.__loc.y(), dimY - this.__radius),
+                        0 + this.__radius));
+
         this.__acc = this.__acc.scale(0);
+
+        // Rotation
+        if (this.__angularVel != null
+                && this.__angularAcc != null
+                && this.__angularVel.mag() != 0
+                && this.__angularAcc.mag() != 0) {
+            this.__angularVel = this.__angularVel.plus(__angularAcc);
+            this.__angle = this.__angle + this.__angularVel.mag();
+            this.__angularAcc = this.__angularAcc.scale(0);
+        }
 
         if (this.__isBouncy && !this.__isLanded) {
 
@@ -180,6 +248,10 @@ public class Ball extends SceneObject implements Moveable, Renderable, Updateabl
         return this.__vel;
     }
 
+    public void setVelocity(Vec velocity) {
+        this.__vel = velocity;
+    }
+
     @Override
     public Vec getAcceleration() {
         return this.__acc;
@@ -193,6 +265,16 @@ public class Ball extends SceneObject implements Moveable, Renderable, Updateabl
     @Override
     public void setMass(double m) {
         this.__mass = m;
+    }
+
+    @Override
+    public boolean isAttractor() {
+        return this.__isAttractor;
+    }
+
+    @Override
+    public void setAttractor(boolean isAttractor) {
+        this.__isAttractor = isAttractor;
     }
 
     @Override

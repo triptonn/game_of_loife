@@ -34,6 +34,8 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     private boolean __hasDrag = false;
     private double __dragCoefficient = 0.0;
 
+    private boolean __isAttractor = false;
+
     private boolean __isLanded = false;
     private boolean __isSliding = false;
     private boolean __isBouncy = false;
@@ -165,7 +167,8 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
 
     @Override
     public void applyMomentum(Vec momentum) {
-        this.__inertia = this.__mass * ((this.__width + this.__height) / 2);
+        double effectiveRadius = (this.__width + this.__height) / 2;
+        this.__inertia = this.__mass * effectiveRadius * effectiveRadius;
         Vec m = momentum.scale(1 / this.__inertia);
         this.__angularAcc = this.__acc.plus(m);
     }
@@ -196,6 +199,11 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     }
 
     @Override
+    public void setAngularVelocity(Vec angularVel) {
+        this.__angularVel = angularVel;
+    }
+
+    @Override
     public Vec getAngularAcceleration() {
         return this.__angularAcc;
     }
@@ -208,6 +216,16 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     @Override
     public void setMass(double m) {
         this.__mass = m;
+    }
+
+    @Override
+    public boolean isAttractor() {
+        return this.__isAttractor;
+    }
+
+    @Override
+    public void setAttractor(boolean isAttractor) {
+        this.__isAttractor = isAttractor;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package BoxDraw;
+package box_draw;
 
 import interfaces.Inert;
 import interfaces.Moveable;

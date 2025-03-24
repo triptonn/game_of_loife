@@ -1,4 +1,4 @@
-package BoxDraw;
+package box_draw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

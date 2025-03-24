@@ -17,6 +17,8 @@ public interface Moveable {
 
     Vec getAngularVelocity();
 
+    void setAngularVelocity(Vec angularVel);
+
     Vec getAngularAcceleration();
 
     double getMass();
@@ -28,6 +30,10 @@ public interface Moveable {
     void setBouncy(boolean bouncy);
 
     void setBounceFactor(double factor);
+
+    boolean isAttractor();
+
+    void setAttractor(boolean isAttractor);
 
     boolean isLanded();
 

@@ -1,4 +1,4 @@
-package BoxDraw;
+package gravitational;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
