@@ -197,6 +197,11 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     }
 
     @Override
+    public void setAngle(double angle) {
+        this.__angle = angle;
+    }
+
+    @Override
     public double getAngularVelocity() {
         return this.__magAngularVel;
     }
