@@ -1,6 +1,8 @@
 package box_draw;
 
+import interfaces.Attractor;
 import interfaces.Inert;
+import interfaces.Informative;
 import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
@@ -16,8 +18,10 @@ import data.Vec;
 public class SceneModel {
     private boolean isShowComponents = false;
 
-    private ArrayList<SceneObject> objects;
+    private ArrayList<Attractor> attractors;
+    private ArrayList<Informative> informatives;
     private ArrayList<Moveable> movers;
+    private ArrayList<SceneObject> objects;
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
 
@@ -53,8 +57,7 @@ public class SceneModel {
 
     public void update() {
         for (Moveable mover : movers) {
-            Vec force = new Vec(0.0, 0.02);
-            mover.applyForce(force);
+            // Gravity can be placed here
         }
 
         for (Updateable updater : updaters) {
@@ -70,9 +73,14 @@ public class SceneModel {
         ArrayList<Renderable> background = new ArrayList<>();
         ArrayList<Renderable> liquidBodies = new ArrayList<>();
         ArrayList<Renderable> actors = new ArrayList<>();
+        ArrayList<Renderable> informatives = new ArrayList<>();
 
         for (Renderable r : renderers) {
             if (r.isVisible()) {
+                if (r instanceof Informative) {
+                    informatives.add(r);
+                }
+
                 if (r instanceof Moveable) {
                     actors.add(r);
                 }
@@ -98,6 +106,10 @@ public class SceneModel {
         for (Renderable l : liquidBodies) {
             l.render(g2d);
         }
+
+        for (Renderable i : informatives) {
+            i.render(g2d);
+        }
     }
 
     public void setShowComponents(boolean state) {
@@ -106,6 +118,14 @@ public class SceneModel {
 
     public ArrayList<SceneObject> getObjects() {
         return objects;
+    }
+
+    public ArrayList<Attractor> getAttractors() {
+        return this.attractors;
+    }
+
+    public ArrayList<Informative> getInformatives() {
+        return this.informatives;
     }
 
     public boolean isShowComponents() {

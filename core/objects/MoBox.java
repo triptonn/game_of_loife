@@ -21,8 +21,10 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     private Vec __acc;
 
     private double __angle;
-    private Vec __angularVel;
-    private Vec __angularAcc;
+
+    private double __magAngularVel;
+    private Vec __dirAngularVel;
+    private double __angularAcc;
 
     private Color __color;
     private boolean __isVisible = false;
@@ -46,12 +48,14 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
             Vec loc,
             int width,
             int height,
+            double mass,
             Dimension sceneDim,
             Color color) {
 
         super(name, loc, new Dimension(width, height), sceneDim);
         this.__width = width;
         this.__height = height;
+        this.__mass = mass;
 
         this.__loc = loc;
         this.__vel = new Vec(0.0, 0.0);
@@ -79,10 +83,9 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
         this.__acc = this.__acc.scale(0);
 
         // Rotation
-        this.__angularVel = this.__angularVel.plus(__angularAcc);
-        this.__angle = this.__angle + this.__angularVel.mag();
-
-        this.__angularAcc = this.__angularAcc.scale(0);
+        this.__magAngularVel += this.__angularAcc;
+        this.__angle += this.__magAngularVel;
+        this.__angularAcc = 0.0;
 
         // Bounce
         if (this.__isBouncy && !this.__isLanded) {
@@ -166,11 +169,11 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     }
 
     @Override
-    public void applyMomentum(Vec momentum) {
+    public void applyMomentum(double momentum) {
         double effectiveRadius = (this.__width + this.__height) / 2;
         this.__inertia = this.__mass * effectiveRadius * effectiveRadius;
-        Vec m = momentum.scale(1 / this.__inertia);
-        this.__angularAcc = this.__acc.plus(m);
+        double m = momentum * (1 / this.__inertia);
+        this.__angularAcc += m;
     }
 
     @Override
@@ -194,17 +197,17 @@ public class MoBox extends SceneObject implements Moveable, Renderable, Updateab
     }
 
     @Override
-    public Vec getAngularVelocity() {
-        return this.__angularVel;
+    public double getAngularVelocity() {
+        return this.__magAngularVel;
     }
 
     @Override
-    public void setAngularVelocity(Vec angularVel) {
-        this.__angularVel = angularVel;
+    public void setAngularVelocity(double angularVel) {
+        this.__magAngularVel = angularVel;
     }
 
     @Override
-    public Vec getAngularAcceleration() {
+    public double getAngularAcceleration() {
         return this.__angularAcc;
     }
 

@@ -1,6 +1,8 @@
 package templates;
 
+import interfaces.Attractor;
 import interfaces.Inert;
+import interfaces.Informative;
 import interfaces.Moveable;
 import interfaces.Renderable;
 import interfaces.Updateable;
@@ -16,8 +18,10 @@ import data.Vec;
 public class SceneModel {
     private boolean isShowComponents = false;
 
-    private ArrayList<SceneObject> objects;
+    private ArrayList<Attractor> attractors;
+    private ArrayList<Informative> informatives;
     private ArrayList<Moveable> movers;
+    private ArrayList<SceneObject> objects;
     private ArrayList<Renderable> renderers;
     private ArrayList<Updateable> updaters;
 
@@ -49,12 +53,15 @@ public class SceneModel {
         if (obj instanceof Renderable) {
             renderers.add((Renderable) obj);
         }
+
+        if (obj instanceof Informative) {
+            informatives.add((Informative) obj);
+        }
     }
 
     public void update() {
         for (Moveable mover : movers) {
-            Vec force = new Vec(0.0, 0.02);
-            mover.applyForce(force);
+            // Gravity could go here
         }
 
         for (Updateable updater : updaters) {
@@ -105,7 +112,15 @@ public class SceneModel {
     }
 
     public ArrayList<SceneObject> getObjects() {
-        return objects;
+        return this.objects;
+    }
+
+    public ArrayList<Attractor> getAttractors() {
+        return this.attractors;
+    }
+
+    public ArrayList<Informative> getInformatives() {
+        return this.informatives;
     }
 
     public boolean isShowComponents() {

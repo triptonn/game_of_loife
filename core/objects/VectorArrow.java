@@ -11,37 +11,46 @@ import interfaces.Renderable;
 import interfaces.Updateable;
 
 public class VectorArrow extends SceneObject implements Informative, Renderable, Updateable {
-    private Vec self;
+    private Vec __self;
+    private double __angle;
 
     private Color color;
     private boolean isVisible;
     private int ARROW_SIZE;
 
-    public VectorArrow(String name, Vec self, Vec loc, int arrowSize, Dimension dim, Color color) {
+    public VectorArrow(
+            String name,
+            Vec self,
+            Vec loc,
+            int arrowSize,
+            Dimension dim,
+            Color color) {
         super(name, loc, new Dimension((int) self.x(), (int) self.y()), dim);
-        this.self = self;
+        this.__self = self;
         this.ARROW_SIZE = arrowSize;
         this.color = color;
     }
 
     @Override
     public void update() {
+
     }
 
     public void update(Vec self) {
-        this.self = self;
+        this.__self = self;
     };
 
     @Override
     public void render(Graphics2D g2d) {
-        if (this.self.mag() == 0) {
+        if (this.__self.mag() == 0) {
             return;
         }
 
         g2d.setColor(color);
+        g2d.rotate(this.__angle, this.__loc.x(), this.__loc.y());
         g2d.setStroke(new BasicStroke(2));
 
-        Vec end = __loc.plus(this.self);
+        Vec end = __loc.plus(this.__self);
 
         g2d.drawLine((int) this.__loc.x(), (int) this.__loc.y(),
                 (int) end.x(), (int) end.y());
@@ -68,6 +77,16 @@ public class VectorArrow extends SceneObject implements Informative, Renderable,
 
     public void setLocation(Vec loc) {
         this.__loc = loc;
+    }
+
+    @Override
+    public double getAngle() {
+        return this.__angle;
+    }
+
+    @Override
+    public void setAngle(double angle) {
+        this.__angle = angle;
     }
 
     public Color getColor() {

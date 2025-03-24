@@ -7,6 +7,7 @@ import interfaces.Moveable;
 import objects.Box;
 import objects.MoBox;
 import objects.SceneObject;
+import objects.VectorArrow;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,8 +27,14 @@ public class BoxDraw {
     private final ScenePanel panel;
     private final JFrame frame;
 
+    private Vec angularVel_mobox = new Vec(0.0, 0.0);
+    private Vec locAngularVelocity_mobox = new Vec(0.0, 0.0);
+    private double __angle;
+
     public BoxDraw() {
         model = new SceneModel(this.dim);
+        model.setShowComponents(true);
+
         panel = new ScenePanel(model);
         frame = new JFrame("BoxDraw");
 
@@ -80,10 +87,22 @@ public class BoxDraw {
         for (SceneObject obj : model.getObjects()) {
             if (obj instanceof Moveable) {
                 Moveable m = (Moveable) obj;
-                Vec momentum = new Vec(0.0, 0.0, 2.0);
-                m.applyMomentum(momentum);
+                double momentumMagnitude = 2.0;
+                m.applyMomentum(momentumMagnitude);
+
+                if (m instanceof MoBox) {
+                    MoBox mobox = (MoBox) m;
+                    this.angularVel_mobox = new Vec(0.0, mobox.getAngularVelocity());
+                    this.__angle = mobox.getAngle() + (Math.PI / 4);
+                }
+            }
+
+            if (obj instanceof VectorArrow) {
+                VectorArrow v = (VectorArrow) obj;
+                v.update(this.angularVel_mobox.scale(-1000));
             }
         }
+        model.update();
     };
 
     private void setupScene() {
@@ -94,11 +113,21 @@ public class BoxDraw {
         box.setVisible(true);
         model.addObject(box);
 
-        MoBox mobox = new MoBox("testi", moboxLoc, 300, 150, dim, Color.red);
+        MoBox mobox = new MoBox("testi", moboxLoc, 300, 150, 1, dim, Color.red);
         mobox.setVisible(true);
         model.addObject(mobox);
 
-        model.setShowComponents(true);
+        this.locAngularVelocity_mobox = mobox.getLocation();
+        VectorArrow angularVelocity_mobox = new VectorArrow(
+                "angularVel",
+                this.angularVel_mobox,
+                this.locAngularVelocity_mobox.minus(new Vec(0.0, -75)),
+                10,
+                this.dim,
+                Color.yellow);
+        angularVelocity_mobox.setVisible(true);
+        model.addObject(angularVelocity_mobox);
+
     }
 
     public static void main(String[] args) {
