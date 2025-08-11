@@ -30,7 +30,7 @@ public class DrawingPanel extends JPanel {
             int height = bar;
             String barString = "" + bar;
 
-            g.drawRect(xPos, yPos, width, height);
+			g.drawRect(xPos, yPos, width, height);
             if (bar > 19) {
                 int numYPos = yPos + (bar / 2) + 6;
                 int numXPos = xPos + (width / 2) - (barString.length() * 4);

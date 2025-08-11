@@ -33,6 +33,7 @@ public class GofGui extends javax.swing.JFrame {
         this.board = board;
         SpringLayout springLayout = new SpringLayout();
         getContentPane().setLayout(springLayout);
+        setTitle("Game of Loife");
 
         JScrollPane scrollPane = new JScrollPane();
         springLayout.putConstraint(SpringLayout.NORTH, scrollPane, 10, SpringLayout.NORTH, getContentPane());

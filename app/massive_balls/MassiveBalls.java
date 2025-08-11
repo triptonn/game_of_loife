@@ -42,7 +42,7 @@ public class MassiveBalls {
         frame = new JFrame("MassiveBalls");
 
         panel.setPreferredSize(dim);
-        panel.setBackground(Color.darkGray);
+        panel.setBackground(Color.black);
 
         panel.addMouseListener(new MouseAdapter() {
             @Override

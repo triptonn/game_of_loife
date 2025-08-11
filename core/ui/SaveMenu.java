@@ -25,7 +25,7 @@ public class SaveMenu extends JDialog {
 
     public SaveMenu(GofGui parent) {
         super(parent, true);
-        setTitle("Save Board");
+        setTitle("Save board");
         setBounds(100, 100, 450, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

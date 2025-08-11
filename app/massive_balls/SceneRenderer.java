@@ -18,7 +18,7 @@ public class SceneRenderer {
 
     public void render(Graphics2D g2d, SceneModel model) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(Color.DARK_GRAY);
+        g2d.setColor(Color.black);
         g2d.fillRect(0, 0, (int) this.scene.getWidth(), (int) this.scene.getHeight());
         model.render(g2d);
     }
