@@ -87,12 +87,12 @@ public class BoxDraw {
         for (SceneObject obj : model.getObjects()) {
             if (obj instanceof Moveable) {
                 Moveable m = (Moveable) obj;
-                double momentumMagnitude = 2.0;
-                m.applyMomentum(momentumMagnitude);
+                Vec momentum_change = new Vec(angularVel_mobox.scale(-1 * 2.0));
+                m.applyMomentum(momentum_change);
 
                 if (m instanceof MoBox) {
                     MoBox mobox = (MoBox) m;
-                    this.angularVel_mobox = new Vec(0.0, mobox.getAngularVelocity());
+                    // this.angularVel_mobox = new Vec(0.0, mobox.getAngularVelocity());
                     this.__angle = mobox.getAngle() + (Math.PI / 4);
                 }
             }

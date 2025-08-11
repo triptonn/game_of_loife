@@ -23,6 +23,8 @@ public class SimpleLiquid extends SceneObject implements Inert, Renderable, Upda
 
         this.viscosity = viscosity;
         this.__color = color;
+        
+        this.__loc = loc;
     }
 
     public boolean contains(Moveable mover) {

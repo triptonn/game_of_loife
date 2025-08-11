@@ -5,7 +5,7 @@ import data.Vec;
 public interface Moveable {
     void applyForce(Vec force);
 
-    void applyMomentum(double momentum);
+    void applyMomentum(Vec momentum);
 
     Vec getLocation();
 
@@ -15,11 +15,11 @@ public interface Moveable {
 
     double getAngle();
 
-    double getAngularVelocity();
+    Vec getAngularVelocity();
 
-    void setAngularVelocity(double angularVel);
+    void setAngularVelocity(Vec angularVel);
 
-    double getAngularAcceleration();
+    Vec getAngularAcceleration();
 
     double getMass();
 

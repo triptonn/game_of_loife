@@ -33,6 +33,12 @@ public class Ball extends SceneObject implements Moveable, Attractor, Renderable
         return this.__angle;
     }
 
+	@Override
+	public void setAngle(double angle) {
+		this.__angle = angle;
+		
+	}
+
     @Override
     public Vec getAngularVelocity() {
         return this.__angularVel;
