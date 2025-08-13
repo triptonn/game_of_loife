@@ -5,28 +5,35 @@ The board size can be adjusted, there is zooming and scrolling for the board, th
 
 Have fun!
 
+## Dependencies
+- JavaSE-21
+
 ## Building Game of Loife
 - Clone this repository
-- then:
-```powershell
-# Requires JDK 21 (javac/java on PATH)
+- Run the build script depending on your environment:
 
-# 1) Create the output directory
-New-Item -ItemType Directory -Force bin | Out-Null
+  - Windows Command Line (cmd)
 
-# 2) Generate an argfile listing all sources under `app` and `core`
-#    Use ASCII so javac can read it reliably on Windows PowerShell 5.1+
-Get-ChildItem -Path app, core -Recurse -File -Filter *.java |
-  ForEach-Object { $_.FullName } |
-  Set-Content -Encoding ascii sources.txt
+  ```cmd
+  REM Run this from the project root directory
+  .\build\build.cmd
+  ```
+  - PowerShell
 
-# 3) Compile all sources into ./bin (packages like `data`, `objects`, `massive_balls` are rooted at app/core)
-#    Quote @sources.txt to avoid PowerShell splatting
-javac -d bin '@sources.txt'
-# (Alternative for Windows PowerShell): javac --% -d bin @sources.txt
+  ```powershell
+  # Run this from the project root directory
+  ./build/build.ps1
+  ```
+  - Bash [Linux and OSX (not tested)]
 
-# 4) Run the application
-java -cp bin game_of_loife/GameOfLife
+  ```bash
+  # Run this from the project root directory
+  ./build/build.sh
+  ```
+
+- Run the application from the project root directory
+```bash
+java -cp bin game_of_loife.GameOfLife
 ```
 
 
