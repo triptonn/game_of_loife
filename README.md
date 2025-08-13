@@ -1,7 +1,6 @@
 # Game of Loife
-Implementation of ["Conway's Game of Life"](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
-
-The board size can be adjusted, there is zooming and scrolling for the board, there are two colors available and boards can be saved and loaded.
+Implementation of ["Conway's Game of Life"](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life). 
+The usable board size can be adjusted, there is zooming and scrolling for the board, two colors can be used and boards can be saved and loaded.
 
 Have fun!
 
@@ -19,20 +18,23 @@ Have fun!
   git clone https://github.com/triptonn/game_of_loife.git
   ```
 - Run the build script depending on your environment:
+  - cd into the cloned repository
+  ```
+  cd ./game_of_loife
+  ```
 
-  - Windows Command Line (cmd)
-
+- Windows Command Line (cmd)
   ```cmd
   REM Run this from the project root directory
   .\build\build.cmd
   ```
-  - PowerShell
+- PowerShell
 
   ```powershell
   # Run this from the project root directory
   ./build/build.ps1
   ```
-  - Bash [Linux and OSX (not tested)]
+- Bash [Linux and OSX (not tested)]
 
   ```bash
   # Run this from the project root directory
@@ -40,9 +42,9 @@ Have fun!
   ```
 
 - Run the application from the project root directory
-```bash
-java -cp bin game_of_loife.GameOfLife
-```
+  ```bash
+  java -cp bin game_of_loife.GameOfLife
+  ```
 
 
 ## Example
